@@ -1,0 +1,12 @@
+{
+  "affogato":            { "x": 0.6,  "y": 0.5,  "zoom": 1.15 },
+  "banana-juice":        { "y": 0.7 },
+  "beer":                { "y": 0.6 },
+  "carrot-cake":         { "y": 0.68 },
+  "chunky-ice-cream":    { "y": 0.6 },
+  "matcha-latte":        { "y": 0.58 },
+  "parfait":             { "y": 0.58 },
+  "pizza-toast":         { "x": 0.45, "y": 0.68, "zoom": 1.2 },
+  "shoratamarantarou":   { "x": 0.48, "y": 0.5,  "zoom": 1.6 },
+  "teacider":            { "y": 0.58 }
+}

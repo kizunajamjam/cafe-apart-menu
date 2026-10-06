@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cafe apart Menu Book</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="book.css">
+</head>
+<body>
+    <div class="toolbar no-print">
+        <span>A4 縦・ブック形式 ／ 印刷時は「余白なし」「背景のグラフィック ON」推奨</span>
+        <button type="button" onclick="window.print()">印刷 / PDF保存</button>
+    </div>
+
+    <!-- ページは book.js の PAGES から生成 -->
+    <main id="book"></main>
+
+    <script src="../data/menu-data.js"></script>
+    <script src="photos/manifest.js"></script>
+    <script src="book.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+/* =========================================
+   cafe apart - Menu Book (A4 portrait, print-first)
+   色・フォントはホームページ / レジ用メニューと共通
+   ========================================= */
+
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #d4a373;
+    --logo-orange: #f39800;
+    --logo-teal: #14a596;
+    --bg-paper: #fefcfb;
+    --bg-sand: #f4f1ea;
+    --text-main: #333333;
+    --text-muted: #777777;
+    --rule: rgba(44, 62, 80, 0.18);
+
+    --font-en: 'Outfit', sans-serif;
+    --font-ja: 'Zen Kaku Gothic New', sans-serif;
+    --font-display: 'Playfair Display', serif;
+
+    --page-w: 210mm;
+    --page-h: 297mm;
+    --page-pad: 13mm;
+    --fs: 1; /* 文字倍率 (book.js が収まるよう調整) */
+    --ph: 1; /* 写真の高さ倍率 (同上) */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-ja);
+    color: var(--text-main);
+    background: #d9d6cf;
+    -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ---------- 画面用ツールバー ---------- */
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 13px;
+}
+
+.toolbar button {
+    font: inherit;
+    font-weight: 500;
+    padding: 6px 18px;
+    border: none;
+    border-radius: 30px;
+    background: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ---------- ページ ---------- */
+.page {
+    width: var(--page-w);
+    height: var(--page-h);
+    margin: 24px auto;
+    padding: var(--page-pad);
+    background: var(--bg-paper);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.page-header {
+    display: flex;
+    align-items: baseline;
+    gap: 4mm;
+    padding-bottom: 2.5mm;
+    border-bottom: 0.4mm solid var(--primary-color);
+    margin-bottom: 6mm;
+}
+
+.page-title {
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: 22pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.page-sub {
+    font-size: 8pt;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+}
+
+.page-logo {
+    height: 10mm;
+    margin-left: auto;
+    align-self: center;
+}
+
+.page-body {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: calc(7mm * var(--fs));
+}
+
+.page-footer {
+    text-align: center;
+    font-family: var(--font-en);
+    font-size: 8pt;
+    color: var(--text-muted);
+    padding-top: 3mm;
+}
+
+/* ---------- セクション見出し (Tea & More ページ) ---------- */
+.section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+    padding-bottom: 1.2mm;
+    border-bottom: 0.3mm solid var(--rule);
+    margin-bottom: 3.5mm;
+}
+
+.section-en {
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: calc(13pt * var(--fs));
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+.section-limited .section-en { color: var(--logo-orange); }
+.section-kids .section-en { color: var(--logo-teal); }
+
+.section-note {
+    font-size: calc(7.5pt * var(--fs));
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+.section-price {
+    margin-left: auto;
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: calc(10pt * var(--fs));
+    color: var(--primary-color);
+}
+
+/* ---------- 写真カード ---------- */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: calc(5mm * var(--fs)) 5mm;
+}
+
+.card {
+    break-inside: avoid;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-photo {
+    aspect-ratio: 4 / calc(3 * var(--ph));
+    border-radius: 1.5mm;
+    overflow: hidden;
+    background: var(--bg-sand);
+}
+
+.card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.card-body {
+    padding-top: 2mm;
+}
+
+/* ---------- 文字だけの品目リスト ---------- */
+.list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(2.2mm * var(--fs)) 8mm;
+    background: var(--bg-sand);
+    border-radius: 2mm;
+    padding: calc(4mm * var(--fs)) 5mm;
+}
+
+.cards + .list { margin-top: calc(5mm * var(--fs)); }
+
+.section-kids .list { grid-template-columns: repeat(3, 1fr); }
+
+/* ---------- 品目テキスト (カード・リスト共通) ---------- */
+.item-line {
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+}
+
+.item-name {
+    font-weight: 700;
+    font-size: calc(9.5pt * var(--fs));
+    line-height: 1.35;
+    color: var(--primary-color);
+    word-break: auto-phrase;
+    text-wrap: pretty;
+}
+
+.leader {
+    flex: 1;
+    min-width: 3mm;
+    border-bottom: 0.3mm dotted rgba(44, 62, 80, 0.35);
+    transform: translateY(-1mm);
+}
+
+.item-price {
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: calc(10pt * var(--fs));
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.item-en {
+    font-family: var(--font-en);
+    font-size: calc(7pt * var(--fs));
+    letter-spacing: 0.04em;
+    color: var(--accent-color);
+    margin-top: 0.3mm;
+}
+
+.item-note {
+    font-size: calc(7pt * var(--fs));
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin-top: 0.4mm;
+    word-break: auto-phrase;
+    text-wrap: pretty;
+}
+
+/* 2列 (フード・スイーツ) は大きい写真なので文字も少し大きく */
+.cards[style*="--cols: 2"] .item-name { font-size: calc(11pt * var(--fs)); }
+.cards[style*="--cols: 2"] .item-price { font-size: calc(11pt * var(--fs)); }
+.cards[style*="--cols: 2"] .item-en,
+.cards[style*="--cols: 2"] .item-note { font-size: calc(8pt * var(--fs)); }
+.cards[style*="--cols: 2"] { gap: calc(6mm * var(--fs)) 7mm; }
+
+/* ドリンクは4列なので少し小さめ */
+.section-drink .item-name { font-size: calc(8.5pt * var(--fs)); }
+.section-drink .item-price { font-size: calc(9pt * var(--fs)); }
+
+/* ---------- 表紙・裏表紙 ---------- */
+.page-cover,
+.page-back {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.page-cover::before {
+    content: '';
+    position: absolute;
+    inset: 9mm;
+    border: 0.3mm solid var(--rule);
+    pointer-events: none;
+}
+
+.cover-logo {
+    width: 105mm;
+    height: auto;
+}
+
+.cover-title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 30pt;
+    color: var(--primary-color);
+    margin-top: 6mm;
+}
+
+.cover-title::before,
+.cover-title::after {
+    content: '';
+    display: inline-block;
+    width: 20mm;
+    height: 0.3mm;
+    background: var(--accent-color);
+    vertical-align: middle;
+    margin: 0 6mm;
+}
+
+.cover-sub {
+    font-size: 10pt;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    margin-top: 8mm;
+}
+
+.cover-foot {
+    position: absolute;
+    bottom: 18mm;
+    left: 0;
+    right: 0;
+    font-family: var(--font-en);
+    font-size: 9pt;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+}
+
+.page-back { background: var(--bg-sand); }
+
+.back-logo {
+    width: 60mm;
+    margin-bottom: 12mm;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 4mm 8mm;
+    text-align: left;
+    font-size: 10pt;
+    line-height: 1.7;
+}
+
+.info dt {
+    font-family: var(--font-en);
+    font-size: 8pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    padding-top: 1mm;
+}
+
+.info dd { color: var(--primary-color); }
+
+/* ---------- 印刷 ---------- */
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+    body { background: none; }
+    .no-print { display: none !important; }
+    .page {
+        margin: 0;
+        box-shadow: none;
+        break-after: page;
+    }
+    .page:last-child { break-after: auto; }
+}
+
+/* ---------- 狭い画面ではページを縮小表示 ---------- */
+@media screen and (max-width: 840px) { .page { zoom: 0.75; } }
+@media screen and (max-width: 640px) { .page { zoom: 0.55; } }
+@media screen and (max-width: 480px) { .page { zoom: 0.45; } }
+@media screen and (max-width: 390px) { .page { zoom: 0.4; } }

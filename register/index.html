@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cafe apart Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+    <div class="toolbar no-print">
+        <span>A4 縦・2ページ ／ 印刷時は「余白なし」「背景のグラフィック ON」推奨</span>
+        <button type="button" onclick="window.print()">印刷 / PDF保存</button>
+    </div>
+
+    <!-- 1ページ目: ドリンク -->
+    <section class="page">
+        <header class="page-header">
+            <img src="../assets/logo.png" alt="cafe apart" class="logo">
+            <p class="page-label">Drinks</p>
+        </header>
+        <div class="columns">
+            <div class="column" data-sections="drink"></div>
+            <div class="column" data-sections="t2 limited"></div>
+        </div>
+        <footer class="page-footer">
+            <span>cafe apart</span><span>Ibaraki, Osaka</span>
+        </footer>
+    </section>
+
+    <!-- 2ページ目: フード・スイーツ -->
+    <section class="page">
+        <header class="page-header">
+            <img src="../assets/logo.png" alt="cafe apart" class="logo">
+            <p class="page-label">Food &amp; Sweets</p>
+        </header>
+        <div class="columns">
+            <div class="column" data-sections="food"></div>
+            <div class="column" data-sections="sweets"></div>
+        </div>
+        <div class="band" data-sections="kids"></div>
+        <footer class="page-footer">
+            <span>大阪府茨木市駅前4-6-7</span>
+            <span>9:30 – 18:30（L.O. 18:00）定休日：火曜日</span>
+            <span>@cafe.apart</span>
+        </footer>
+    </section>
+
+    <script src="../data/menu-data.js"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
