@@ -255,6 +255,70 @@ body {
 }
 .section-limited .card-body { flex: 1; padding: 0 6mm 0 0; }
 
+/* ---------- 大小を付けた配置 (スイーツ) ---------- */
+/* side: 主役を左に大きく、ほかを右に縦に並べる (side-right は左右反転) */
+.cards.layout-side,
+.cards.layout-side-right {
+    grid-template-columns: 1.3fr 1fr;
+    gap: calc(4mm * var(--fs)) 6mm;
+}
+.cards.layout-side-right { grid-template-columns: 1fr 1.3fr; }
+
+.layout-side .is-hero { grid-column: 1; grid-row: 1 / span var(--rest); }
+.layout-side-right .is-hero { grid-column: 2; grid-row: 1 / span var(--rest); }
+.layout-side-right .card:not(.is-hero) { grid-column: 1; }
+
+.layout-side .is-hero .card-photo,
+.layout-side-right .is-hero .card-photo {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 40mm;
+}
+
+/* 小さいカードは横長 (写真左・文字右) */
+.layout-side .card:not(.is-hero),
+.layout-side-right .card:not(.is-hero) {
+    flex-direction: row;
+    align-items: center;
+    gap: 4mm;
+}
+.layout-side .card:not(.is-hero) .card-photo,
+.layout-side-right .card:not(.is-hero) .card-photo {
+    width: 36%;
+    flex-shrink: 0;
+    aspect-ratio: 1 / calc(0.75 * var(--ph));
+}
+.layout-side .card:not(.is-hero) .card-body,
+.layout-side-right .card:not(.is-hero) .card-body {
+    flex: 1;
+    min-width: 0;
+    padding-top: 0;
+}
+
+/* top: 主役をページ幅いっぱいに、ほかを下に3列 */
+.cards.layout-top {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(5mm * var(--fs)) 5mm;
+}
+.layout-top .is-hero { grid-column: 1 / -1; }
+.layout-top .is-hero .card-photo { aspect-ratio: 16 / calc(9 * var(--ph)); }
+
+/* 主役は文字も大きく */
+.is-hero .card-body { padding-top: 2.5mm; }
+.is-hero .item-name { font-size: calc(13pt * var(--fs)); }
+.is-hero .item-price { font-size: calc(13pt * var(--fs)); }
+.is-hero .item-en,
+.is-hero .item-note { font-size: calc(8.5pt * var(--fs)); }
+.layout-top .is-hero .card-body { max-width: 60%; }
+
+/* 小さいカードの文字 */
+.layout-side .card:not(.is-hero) .item-name,
+.layout-side-right .card:not(.is-hero) .item-name,
+.layout-top .card:not(.is-hero) .item-name { font-size: calc(9.5pt * var(--fs)); }
+.layout-side .card:not(.is-hero) .item-price,
+.layout-side-right .card:not(.is-hero) .item-price,
+.layout-top .card:not(.is-hero) .item-price { font-size: calc(10.5pt * var(--fs)); }
+
 /* ---------- 品目テキスト (カード・リスト共通) ---------- */
 .item-line {
     display: flex;

@@ -43,16 +43,20 @@ const PAGES = [
           items: ['バタートースト', 'マクドみたいなポテト', 'ポテトチップス'] },
         { key: 'food', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
+    // スイーツは大小を付けた配置 (layout)。hero の商品を大きく、ほかを小さく並べる
+    //   side:       主役を左に大きく、ほかを右に縦に並べる
+    //   side-right: 主役を右に大きく、ほかを左に縦に並べる
+    //   top:        主役をページ幅いっぱいに大きく、ほかを下に横に並べる
     { label: 'Sweets', sub: 'スイーツ', sections: [
-        { key: 'sweets', cols: 4, title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
+        { key: 'sweets', layout: 'side', hero: 'クレープ', title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
           items: ['クレープ', 'シングルクレープ（バナナ）', 'シングルクレープ（レモン）', 'シングルクレープ(白玉抹茶)'] },
-        { key: 'sweets', cols: 4, title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
+        { key: 'sweets', layout: 'side-right', hero: 'チーズケーキ', title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
           items: ['手作りキャロットケーキ', 'チーズケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'] },
     ] },
     { label: 'Sweets', sub: 'スイーツ', sections: [
-        { key: 'sweets', cols: 2, title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
+        { key: 'sweets', layout: 'top', hero: 'チャンキーアイスクリーム', title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
           items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
-        { key: 'sweets', cols: 2, title: 'Others', sub: 'その他', rest: true },
+        { key: 'sweets', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
     // 裏表紙
     { label: 'Kids', sub: 'キッズメニュー',
@@ -144,8 +148,13 @@ function renderSection(conf, items) {
     const withPhoto = items.filter(usePhoto);
     const textOnly = items.filter(it => !usePhoto(it));
 
-    const cards = withPhoto.map(it => `
-        <article class="card">
+    // layout 指定がある時は、主役 (hero) を先頭に
+    if (conf.layout && conf.hero) {
+        const i = withPhoto.findIndex(it => it.title === conf.hero);
+        if (i > 0) withPhoto.unshift(withPhoto.splice(i, 1)[0]);
+    }
+    const cards = withPhoto.map((it, i) => `
+        <article class="card${conf.layout && i === 0 ? ' is-hero' : ''}">
             <div class="card-photo"><img src="photos/${photoKey(it.img)}.jpg" alt="${escapeHtml(it.title)}"></div>
             <div class="card-body">${itemText(it, conf, shared)}</div>
         </article>`).join('');
@@ -161,7 +170,7 @@ function renderSection(conf, items) {
                 ${conf.mood ? `<span class="section-mood">${escapeHtml(conf.mood)}</span>` : ''}
                 ${shared.price ? `<span class="section-price">${escapeHtml(formatPrice(shared.price))}</span>` : ''}
             </h3>` : ''}
-            ${cards ? `<div class="cards" style="--cols: ${conf.cols || 3}">${cards}</div>` : ''}
+            ${cards ? `<div class="cards${conf.layout ? ` layout-${conf.layout}` : ''}" style="--cols: ${conf.cols || 3}; --rest: ${Math.max(1, withPhoto.length - 1)}">${cards}</div>` : ''}
             ${list ? `<ul class="list">${list}</ul>` : ''}
         </section>`;
 }
@@ -259,7 +268,7 @@ function render() {
             .map(([conf, items]) => renderSection(conf, items))
             .join('');
         return `
-            <section class="page${page.t2 ? ' page-t2' : ''}" data-group="${escapeHtml(page.label + ':' + page.sections.map(c => c.cols || 0).join(','))}">
+            <section class="page${page.t2 ? ' page-t2' : ''}" data-group="${escapeHtml(page.label + ':' + page.sections.map(c => c.layout || c.cols || 0).join(','))}">
                 <header class="page-header">
                     <h2 class="page-title">${escapeHtml(page.label)}</h2>
                     <span class="page-sub">${escapeHtml(page.sub || '')}</span>
