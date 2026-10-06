@@ -39,10 +39,17 @@ const PAGES = [
     ] },
     { label: 'Drinks', sub: 'ドリンク', sections: [
         { key: 'drink', photos: false, title: 'Coffee & Drinks', sub: 'コーヒー・ドリンク' },
-        { key: 't2', photos: false, title: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド', groupPrice: true },
     ] },
-    { type: 'back' },
+    // T2 は1ページの特集。large: 1列・大きめの文字
+    { label: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド',
+      intro: 'cafe apart は、オーストラリア発の紅茶ブランド「T2」の取扱い店です。\n香りの違うティーを、カップでもポットでもお楽しみいただけます。',
+      sections: [
+        { key: 't2', photos: false, large: true, groupPrice: true, title: 'Tea Selection', sub: 'ティーセレクション',
+          items: ['ふんわりバニラのメルボルンブレックファースト', 'フローラルなフレンチアールグレイ', 'フルーティーなパックス・ア・ピーチ', 'スパイシーなオーガニックチャイ'] },
+        { key: 't2', photos: false, large: true, title: 'Arrange', sub: 'アレンジティー', rest: true },
+    ] },
 ];
+// 店舗情報は表紙の下に載せる (8ページ = 4の倍数で中綴じできるよう、裏表紙は作らない)
 
 // スプレッドシート（ホームページ）には載せるが、メニューには出さない品目
 const HIDDEN_TITLES = ['頑張るアルバイトさん'];
@@ -103,7 +110,7 @@ function renderSection(conf, items) {
     const list = textOnly.map(it => `<li class="list-item">${itemText(it, conf, shared)}</li>`).join('');
 
     return `
-        <section class="section section-${conf.key}${conf.photos === false ? ' is-text' : ''}">
+        <section class="section section-${conf.key}${conf.photos === false ? ' is-text' : ''}${conf.large ? ' is-large' : ''}">
             ${conf.title ? `
             <h3 class="section-title">
                 <span class="section-en">${escapeHtml(conf.title)}</span>
@@ -124,21 +131,10 @@ function renderCover() {
                 <p class="cover-title">Menu</p>
                 <p class="cover-sub">居心地のよい、いつもの場所。</p>
             </div>
-            <p class="cover-foot">Ibaraki, Osaka</p>
-        </section>`;
-}
-
-function renderBack() {
-    return `
-        <section class="page page-back">
-            <div class="back-inner">
-                <img src="../assets/logo.png" alt="cafe apart" class="back-logo">
-                <dl class="info">
-                    <dt>Address</dt><dd>${escapeHtml(SHOP.address)}</dd>
-                    <dt>Open</dt><dd>${escapeHtml(SHOP.hours)}<br>${escapeHtml(SHOP.closed)}</dd>
-                    <dt>Information</dt><dd>ペット同伴可<br>T2 オーストラリア発紅茶 取扱い店</dd>
-                    <dt>Instagram</dt><dd>${escapeHtml(SHOP.instagram)}</dd>
-                </dl>
+            <div class="cover-foot">
+                <p>${escapeHtml(SHOP.address)}</p>
+                <p>${escapeHtml(SHOP.hours)}　${escapeHtml(SHOP.closed)}</p>
+                <p>ペット同伴可　／　T2 オーストラリア発紅茶 取扱い店　／　Instagram ${escapeHtml(SHOP.instagram)}</p>
             </div>
         </section>`;
 }
@@ -160,7 +156,6 @@ function render() {
     document.getElementById('book').innerHTML = PAGES.map(page => {
         pageNo++;
         if (page.type === 'cover') return renderCover();
-        if (page.type === 'back') return renderBack();
         const body = page.sections
             .map(conf => [conf, sectionItems(conf, data)])
             .filter(([, items]) => items.length)
@@ -173,13 +168,15 @@ function render() {
                     <span class="page-sub">${escapeHtml(page.sub || '')}</span>
                     <img src="../assets/logo.png" alt="" class="page-logo">
                 </header>
+                ${page.intro ? `<p class="page-intro">${page.intro.split('\n').map(escapeHtml).join('<br>')}</p>` : ''}
                 <div class="page-body">${body}</div>
                 <footer class="page-footer">${pageNo}</footer>
             </section>`;
     }).join('');
 }
 
-// ページからはみ出す場合は、写真の高さ (--ph) → 文字 (--fs) の順に縮めて収める
+// ページからはみ出す場合は、写真の高さ (--ph) → 文字 (--fs) の順に縮めて収める。
+// 余白がある時は写真を大きく、写真のないページは文字を大きくする
 function fitPages() {
     document.querySelectorAll('.page').forEach(page => {
         const body = page.querySelector('.page-body');
@@ -191,6 +188,9 @@ function fitPages() {
         // 余白があれば写真を縦に大きく (最大で正方形)、はみ出すなら小さく
         while (!overflows() && ph < 1.33) { ph = +(ph + 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         while (overflows() && ph > 0.7) { ph = +(ph - 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
+        if (!page.querySelector('.card')) {
+            while (!overflows() && fs < 1.3) { fs = +(fs + 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
+        }
         while (overflows() && fs > 0.8) { fs = +(fs - 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
     });
 

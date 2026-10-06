@@ -306,13 +306,28 @@ body {
 .cards[style*="--cols: 2"] .item-note { font-size: calc(8pt * var(--fs)); }
 .cards[style*="--cols: 2"] { gap: calc(6mm * var(--fs)) 7mm; }
 
-/* ドリンクは4列なので少し小さめ */
-.section-drink .item-name { font-size: calc(8.5pt * var(--fs)); }
-.section-drink .item-price { font-size: calc(9pt * var(--fs)); }
+/* ---------- T2 などの特集ページ (1列・大きめの文字) ---------- */
+.page-intro {
+    font-size: 9pt;
+    line-height: 1.9;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 2mm 0 4mm;
+}
 
-/* ---------- 表紙・裏表紙 ---------- */
-.page-cover,
-.page-back {
+.is-large .list {
+    grid-template-columns: 1fr;
+    gap: calc(4mm * var(--fs));
+}
+
+.is-large .item-name { font-size: calc(12pt * var(--fs)); }
+.is-large .item-price { font-size: calc(12pt * var(--fs)); }
+.is-large .item-note { font-size: calc(8.5pt * var(--fs)); margin-top: 0.8mm; }
+.is-large .section-price { font-size: calc(12pt * var(--fs)); }
+
+/* ---------- 表紙 ---------- */
+.page-cover {
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -357,43 +372,19 @@ body {
     margin-top: 8mm;
 }
 
+/* 店舗情報 (裏表紙の代わりに表紙の下へ) */
 .cover-foot {
     position: absolute;
-    bottom: 18mm;
-    left: 0;
-    right: 0;
-    font-family: var(--font-en);
-    font-size: 9pt;
-    letter-spacing: 0.3em;
+    bottom: 17mm;
+    left: 16mm;
+    right: 16mm;
+    padding-top: 4mm;
+    border-top: 0.3mm solid var(--rule);
+    font-size: 8pt;
+    line-height: 1.9;
+    letter-spacing: 0.05em;
     color: var(--text-muted);
 }
-
-.page-back { background: var(--bg-sand); }
-
-.back-logo {
-    width: 60mm;
-    margin-bottom: 12mm;
-}
-
-.info {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 4mm 8mm;
-    text-align: left;
-    font-size: 10pt;
-    line-height: 1.7;
-}
-
-.info dt {
-    font-family: var(--font-en);
-    font-size: 8pt;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent-color);
-    padding-top: 1mm;
-}
-
-.info dd { color: var(--primary-color); }
 
 /* ---------- 印刷 ---------- */
 @page {
