@@ -115,6 +115,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: calc(7mm * var(--fs));
+    /* 余白が残る時は、グループの間に均等に配分する */
+    justify-content: space-evenly;
 }
 
 .page-footer {
@@ -153,6 +155,14 @@ body {
     color: var(--text-muted);
 }
 
+.section-mood {
+    margin-left: auto;
+    font-family: var(--font-ja);
+    font-size: calc(8pt * var(--fs));
+    letter-spacing: 0.1em;
+    color: var(--accent-color);
+}
+
 .section-price {
     margin-left: auto;
     font-family: var(--font-en);
@@ -161,10 +171,21 @@ body {
     color: var(--primary-color);
 }
 
+/* ドリンクなど文字だけのセクションは、背景なしの2列リスト */
+.is-text .list {
+    background: none;
+    padding: 0;
+    gap: calc(3.5mm * var(--fs)) 10mm;
+}
+
+.is-text .item-name { font-size: calc(10pt * var(--fs)); }
+.is-text .item-en,
+.is-text .item-note { font-size: calc(7.5pt * var(--fs)); }
+
 /* ---------- 写真カード ---------- */
 .cards {
     display: grid;
-    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     gap: calc(5mm * var(--fs)) 5mm;
 }
 
@@ -206,6 +227,29 @@ body {
 .cards + .list { margin-top: calc(5mm * var(--fs)); }
 
 .section-kids .list { grid-template-columns: repeat(3, 1fr); }
+
+/* カードは幅が狭いので、名前と価格が1行に入らない時は価格を次の行の右端へ回す
+   (名前の途中で改行しない。名前がカード幅より長い時だけ折り返す) */
+.card .item-line { flex-wrap: wrap; }
+.card .item-name { overflow-wrap: break-word; min-width: 0; }
+.card .item-price { flex-shrink: 0; margin-left: auto; }
+
+/* 期間限定は横長カード (写真左・文字右) */
+.section-limited .cards { grid-template-columns: 1fr; }
+.section-limited .card {
+    flex-direction: row;
+    align-items: center;
+    gap: 6mm;
+    background: var(--bg-sand);
+    border-radius: 2mm;
+    overflow: hidden;
+}
+.section-limited .card-photo {
+    width: 38%;
+    flex-shrink: 0;
+    border-radius: 0;
+}
+.section-limited .card-body { flex: 1; padding: 0 6mm 0 0; }
 
 /* ---------- 品目テキスト (カード・リスト共通) ---------- */
 .item-line {

@@ -1,22 +1,45 @@
 /**
  * cafe apart - ブックメニュー レンダリング
  * data/menu-data.js (window.MENU_DATA) と photos/manifest.js (window.BOOK_PHOTOS) から各ページを生成する。
- * 写真がある商品は写真カード、ない商品は文字だけのリストで載せる。
+ * 写真がある商品は写真カード、ない商品は文字だけのリストで載せる (ドリンクは写真なし)。
  */
 
-// ページ構成。cols は写真カードの列数、photos は [開始, 終了) で写真カードを複数ページに分ける
-// (文字だけの品目は、そのカテゴリの最後のページに載る)。8ページ (4の倍数) で中綴じ製本できる
+// ページ構成。
+// フード・スイーツは種類と雰囲気でグループ分けする (items: スプレッドシートの商品名)。
+// どのグループにも入っていない商品は、rest: true のグループ (「その他」) に自動で入る。
+// cols は写真カードの列数。photos: false のセクションは写真を使わず文字だけで載せる。
 const PAGES = [
     { type: 'cover' },
-    { label: 'Food',   sub: 'フード',   sections: [{ key: 'food', cols: 2, photos: [0, 6] }] },
-    { label: 'Food',   sub: 'フード',   sections: [{ key: 'food', cols: 2, photos: [6] }] },
-    { label: 'Sweets', sub: 'スイーツ', sections: [{ key: 'sweets', cols: 2, photos: [0, 6] }] },
-    { label: 'Sweets', sub: 'スイーツ', sections: [{ key: 'sweets', cols: 2, photos: [6] }] },
-    { label: 'Drinks', sub: 'ドリンク', sections: [{ key: 'drink', cols: 4 }] },
-    { label: 'Tea & More', sub: 'T2ティー・期間限定・キッズ', sections: [
-        { key: 't2', title: 'T2 Tea', note: 'オーストラリア発の紅茶ブランド', cols: 3, groupPrice: true },
-        { key: 'limited', title: 'Limited', note: '期間限定', cols: 3 },
-        { key: 'kids', title: 'Kids', note: '米粉を使用したアレルギー配慮メニュー', groupPrice: true, hideNote: true },
+    { label: 'Food', sub: 'フード', sections: [
+        { key: 'food', cols: 3, title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
+          items: ['華麗なカレーとドライなカレー', '華麗なカレーと激ウマバケット', 'クリームどんちゃん'] },
+        { key: 'food', cols: 3, title: 'Toast', sub: 'トースト', mood: 'ブランチにぴったりの一皿',
+          items: ['ブルーチーズバナナトースト', 'ピザトースト(バゲット)', 'ブルックリンブランチ'] },
+    ] },
+    { label: 'Food', sub: 'フード', sections: [
+        { key: 'food', cols: 3, title: 'Sandwich & Hotdog', sub: 'サンド・ホットドッグ', mood: '片手で気軽に',
+          items: ['ニューヨークホットドック', 'あんバターサンド', 'たまごっちサンド'] },
+        { key: 'food', cols: 3, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
+          items: ['バタートースト', 'たまごっちハーフ', 'マクドみたいなポテト', 'ポテトチップス'] },
+        { key: 'food', cols: 3, title: 'Others', sub: 'その他', rest: true },
+    ] },
+    { label: 'Sweets', sub: 'スイーツ', sections: [
+        { key: 'sweets', cols: 2, title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
+          items: ['クレープ', 'シングルクレープ（バナナ）', 'シングルクレープ（レモン）', 'シングルクレープ(白玉抹茶)'] },
+    ] },
+    { label: 'Sweets', sub: 'スイーツ', sections: [
+        { key: 'sweets', cols: 2, title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
+          items: ['手作りキャロットケーキ', 'チーズケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'] },
+    ] },
+    { label: 'Sweets', sub: 'スイーツ', sections: [
+        { key: 'sweets', cols: 2, title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
+          items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
+        { key: 'sweets', cols: 2, title: 'Others', sub: 'その他', rest: true },
+        { key: 'limited', cols: 2, title: 'Limited', sub: '期間限定', mood: 'いまだけのお楽しみ' },
+    ] },
+    { label: 'Drinks', sub: 'ドリンク', sections: [
+        { key: 'drink', photos: false, title: 'Coffee & Drinks', sub: 'コーヒー・ドリンク' },
+        { key: 't2', photos: false, title: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド', groupPrice: true },
     ] },
     { type: 'back' },
 ];
@@ -67,10 +90,9 @@ function renderSection(conf, items) {
     const shared = conf.groupPrice
         ? { price: commonValue(items, 'price'), desc: commonValue(items, 'desc') }
         : { price: '', desc: '' };
-    const [start, end] = conf.photos || [0];
-    const withPhoto = items.filter(hasPhoto).slice(start, end);
-    const isLastPart = end === undefined;
-    const textOnly = isLastPart ? items.filter(it => !hasPhoto(it)) : [];
+    const usePhoto = it => conf.photos !== false && hasPhoto(it);
+    const withPhoto = items.filter(usePhoto);
+    const textOnly = items.filter(it => !usePhoto(it));
 
     const cards = withPhoto.map(it => `
         <article class="card">
@@ -81,11 +103,12 @@ function renderSection(conf, items) {
     const list = textOnly.map(it => `<li class="list-item">${itemText(it, conf, shared)}</li>`).join('');
 
     return `
-        <section class="section section-${conf.key}">
+        <section class="section section-${conf.key}${conf.photos === false ? ' is-text' : ''}">
             ${conf.title ? `
             <h3 class="section-title">
                 <span class="section-en">${escapeHtml(conf.title)}</span>
-                ${conf.note ? `<span class="section-note">${escapeHtml(conf.note)}</span>` : ''}
+                ${conf.sub ? `<span class="section-note">${escapeHtml(conf.sub)}</span>` : ''}
+                ${conf.mood ? `<span class="section-mood">${escapeHtml(conf.mood)}</span>` : ''}
                 ${shared.price ? `<span class="section-price">${escapeHtml(formatPrice(shared.price))}</span>` : ''}
             </h3>` : ''}
             ${cards ? `<div class="cards" style="--cols: ${conf.cols || 3}">${cards}</div>` : ''}
@@ -120,6 +143,17 @@ function renderBack() {
         </section>`;
 }
 
+// グループに指定された商品名の順で並べる。rest: true は、どのグループにも入っていない商品
+function sectionItems(conf, data) {
+    const inCategory = data.filter(it => it.category === conf.key);
+    if (conf.items) return conf.items.map(t => inCategory.find(it => it.title === t)).filter(Boolean);
+    if (conf.rest) {
+        const claimed = new Set(PAGES.flatMap(p => p.sections || []).flatMap(c => c.key === conf.key && c.items ? c.items : []));
+        return inCategory.filter(it => !claimed.has(it.title));
+    }
+    return inCategory;
+}
+
 function render() {
     const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title));
     let pageNo = 0;
@@ -128,7 +162,7 @@ function render() {
         if (page.type === 'cover') return renderCover();
         if (page.type === 'back') return renderBack();
         const body = page.sections
-            .map(conf => [conf, data.filter(it => it.category === conf.key)])
+            .map(conf => [conf, sectionItems(conf, data)])
             .filter(([, items]) => items.length)
             .map(([conf, items]) => renderSection(conf, items))
             .join('');
@@ -154,6 +188,8 @@ function fitPages() {
         let ph = 1, fs = 1;
         page.style.removeProperty('--ph');
         page.style.removeProperty('--fs');
+        // 余白があれば写真を縦に大きく (最大で正方形)、はみ出すなら小さく
+        while (!overflows() && ph < 1.33) { ph = +(ph + 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         while (overflows() && ph > 0.7) { ph = +(ph - 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         while (overflows() && fs > 0.8) { fs = +(fs - 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
     });
