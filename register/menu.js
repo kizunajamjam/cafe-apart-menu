@@ -15,10 +15,25 @@ const SECTIONS = {
 // スプレッドシート（ホームページ）には載せるが、印刷メニューには出さない品目
 const HIDDEN_TITLES = ['頑張るアルバイトさん'];
 
-// 別の商品として載せず、元の商品に「〜に変更可能」と書くもの (変更後の商品名: 表示する文)
+// 別の商品として載せず、元の商品にまとめるもの
+//   label: 「〜に変更可能」と書く (価格差は自動)
+//   size:  サイズ違いとして価格を並べる (例: フル ¥700 / ハーフ ¥500)
 const VARIANTS = {
     '華麗なカレーとドライなカレー': [{ title: '華麗なカレーと激ウマバケット', label: 'ドライカレーをバゲットに変更可能' }],
+    'たまごっちサンド': [{ title: 'たまごっちハーフ', size: 'ハーフ', baseSize: 'フル' }],
 };
+
+// サイズ違いの価格を並べる (フル ¥700 / ハーフ ¥500)
+function sizedPrice(base, allData) {
+    const sizes = (VARIANTS[base.title] || []).filter(v => v.size);
+    if (!sizes.length) return '';
+    const parts = [`${sizes[0].baseSize} ${formatPrice(base.price)}`];
+    sizes.forEach(v => {
+        const item = allData.find(it => it.title === v.title);
+        if (item) parts.push(`${v.size} ${formatPrice(item.price)}`);
+    });
+    return parts.join(' / ');
+}
 const VARIANT_TITLES = Object.values(VARIANTS).flat().map(v => v.title);
 
 // 変更後の価格の差 (同じなら「同価格」、高ければ「+¥100」)
@@ -49,7 +64,7 @@ function renderSection(key, items) {
     const sharedDesc = conf.groupPrice ? commonValue(items, 'desc') : '';
 
     const rows = items.map(it => {
-        const price = it.price && it.price !== shared ? formatPrice(it.price) : '';
+        const price = sizedPrice(it, window.MENU_DATA || []) || (it.price && it.price !== shared ? formatPrice(it.price) : '');
         const desc = it.desc !== sharedDesc ? it.desc : '';
         const note = conf.hideNote ? '' : it.note;
         return `
@@ -59,7 +74,7 @@ function renderSection(key, items) {
                     ${price ? `<span class="leader"></span><span class="item-price">${escapeHtml(price)}</span>` : ''}
                 </div>
                 ${desc || note ? `<div class="item-sub">${desc ? `<span class="item-en">${escapeHtml(desc)}</span>` : ''}${note ? `<span class="item-note">${escapeHtml(note)}</span>` : ''}</div>` : ''}
-                ${(VARIANTS[it.title] || []).map(v => `<div class="item-option">${escapeHtml(optionText(it, v, window.MENU_DATA || []))}</div>`).join('')}
+                ${(VARIANTS[it.title] || []).filter(v => v.label).map(v => `<div class="item-option">${escapeHtml(optionText(it, v, window.MENU_DATA || []))}</div>`).join('')}
             </li>`;
     }).join('');
 

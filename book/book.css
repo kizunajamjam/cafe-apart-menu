@@ -140,7 +140,8 @@ body {
 .section-en {
     font-family: var(--font-en);
     font-weight: 500;
-    font-size: calc(13pt * var(--fs));
+    font-size: calc(13pt * min(var(--fs), 1.15));
+    white-space: nowrap;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--primary-color);
@@ -150,7 +151,8 @@ body {
 .section-kids .section-en { color: var(--logo-teal); }
 
 .section-note {
-    font-size: calc(7.5pt * var(--fs));
+    font-size: calc(7.5pt * min(var(--fs), 1.15));
+    white-space: nowrap;
     letter-spacing: 0.1em;
     color: var(--text-muted);
 }
@@ -158,7 +160,8 @@ body {
 .section-mood {
     margin-left: auto;
     font-family: var(--font-ja);
-    font-size: calc(8pt * var(--fs));
+    font-size: calc(8pt * min(var(--fs), 1.15));
+    white-space: nowrap;
     letter-spacing: 0.1em;
     color: var(--accent-color);
 }
@@ -167,7 +170,8 @@ body {
     margin-left: auto;
     font-family: var(--font-en);
     font-weight: 500;
-    font-size: calc(10pt * var(--fs));
+    font-size: calc(10pt * min(var(--fs), 1.15));
+    white-space: nowrap;
     color: var(--primary-color);
 }
 
@@ -336,7 +340,7 @@ body {
 .is-large .item-name { font-size: calc(12pt * var(--fs)); }
 .is-large .item-price { font-size: calc(12pt * var(--fs)); }
 .is-large .item-note { font-size: calc(8.5pt * var(--fs)); margin-top: 0.8mm; }
-.is-large .section-price { font-size: calc(12pt * var(--fs)); }
+.is-large .section-price { font-size: calc(12pt * min(var(--fs), 1.15)); }
 
 /* ---------- 表紙 ---------- */
 .page-cover {

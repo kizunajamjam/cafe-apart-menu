@@ -4,7 +4,8 @@
  * 写真がある商品は写真カード、ない商品は文字だけのリストで載せる (ドリンクは写真なし)。
  */
 
-// ページ構成。
+// ページ構成 (8ページ = 4の倍数で中綴じできる)。
+// 表紙・ドリンク・T2・キッズ(裏表紙) は固定。フード・スイーツは2〜5ページの4ページに収める。
 // フード・スイーツは種類と雰囲気でグループ分けする (items: スプレッドシートの商品名)。
 // どのグループにも入っていない商品は、rest: true のグループ (「その他」) に自動で入る。
 // cols は写真カードの列数。photos: false のセクションは写真を使わず文字だけで載せる。
@@ -19,23 +20,21 @@ const PAGES = [
     { label: 'Food', sub: 'フード', sections: [
         { key: 'food', cols: 3, title: 'Sandwich & Hotdog', sub: 'サンド・ホットドッグ', mood: '片手で気軽に',
           items: ['ニューヨークホットドック', 'あんバターサンド', 'たまごっちサンド'] },
-        { key: 'food', cols: 3, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
-          items: ['バタートースト', 'たまごっちハーフ', 'マクドみたいなポテト', 'ポテトチップス'] },
+        { key: 'food', cols: 2, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
+          items: ['バタートースト', 'マクドみたいなポテト', 'ポテトチップス'] },
         { key: 'food', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
     { label: 'Sweets', sub: 'スイーツ', sections: [
-        { key: 'sweets', cols: 2, title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
+        { key: 'sweets', cols: 4, title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
           items: ['クレープ', 'シングルクレープ（バナナ）', 'シングルクレープ（レモン）', 'シングルクレープ(白玉抹茶)'] },
-    ] },
-    { label: 'Sweets', sub: 'スイーツ', sections: [
-        { key: 'sweets', cols: 2, title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
+        { key: 'sweets', cols: 4, title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
           items: ['手作りキャロットケーキ', 'チーズケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'] },
     ] },
     { label: 'Sweets', sub: 'スイーツ', sections: [
         { key: 'sweets', cols: 2, title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
           items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
         { key: 'sweets', cols: 2, title: 'Others', sub: 'その他', rest: true },
-        { key: 'limited', cols: 2, title: 'Limited', sub: '期間限定', mood: 'いまだけのお楽しみ' },
+        { key: 'limited', cols: 1, title: 'Limited', sub: '期間限定', mood: 'いまだけのお楽しみ' },
     ] },
     { label: 'Drinks', sub: 'ドリンク', sections: [
         { key: 'drink', photos: false, title: 'Coffee & Drinks', sub: 'コーヒー・ドリンク' },
@@ -48,17 +47,38 @@ const PAGES = [
           items: ['ふんわりバニラのメルボルンブレックファースト', 'フローラルなフレンチアールグレイ', 'フルーティーなパックス・ア・ピーチ', 'スパイシーなオーガニックチャイ'] },
         { key: 't2', photos: false, large: true, title: 'Arrange', sub: 'アレンジティー', rest: true },
     ] },
+    // 裏表紙
+    { label: 'Kids', sub: 'キッズメニュー',
+      intro: '米粉を使用した、アレルギーに配慮したデザートです。',
+      sections: [
+        { key: 'kids', photos: false, large: true, groupPrice: true, hideNote: true, title: 'Kids Dessert', sub: 'キッズデザート' },
+    ] },
 ];
-// 店舗情報は表紙の下に載せる (8ページ = 4の倍数で中綴じできるよう、裏表紙は作らない)
+// 店舗情報は表紙の下に載せる
 
 // スプレッドシート（ホームページ）には載せるが、メニューには出さない品目
 const HIDDEN_TITLES = ['頑張るアルバイトさん'];
 
-// 別の商品として載せず、元の商品に「〜に変更可能」と書くもの (変更後の商品名: 表示する文)
+// 別の商品として載せず、元の商品にまとめるもの
+//   label: 「〜に変更可能」と書く (価格差は自動)
+//   size:  サイズ違いとして価格を並べる (例: フル ¥700 / ハーフ ¥500)
 const VARIANTS = {
     '華麗なカレーとドライなカレー': [{ title: '華麗なカレーと激ウマバケット', label: 'ドライカレーをバゲットに変更可能' }],
+    'たまごっちサンド': [{ title: 'たまごっちハーフ', size: 'ハーフ', baseSize: 'フル' }],
 };
 const VARIANT_TITLES = Object.values(VARIANTS).flat().map(v => v.title);
+
+// サイズ違いの価格を並べる (フル ¥700 / ハーフ ¥500)
+function sizedPrice(base, allData) {
+    const sizes = (VARIANTS[base.title] || []).filter(v => v.size);
+    if (!sizes.length) return '';
+    const parts = [`${sizes[0].baseSize} ${formatPrice(base.price)}`];
+    sizes.forEach(v => {
+        const item = allData.find(it => it.title === v.title);
+        if (item) parts.push(`${v.size} ${formatPrice(item.price)}`);
+    });
+    return parts.join(' / ');
+}
 
 // 変更後の価格の差 (同じなら「同価格」、高ければ「+¥100」)
 function optionText(base, variant, allData) {
@@ -96,7 +116,7 @@ function commonValue(items, field) {
 }
 
 function itemText(it, conf, shared) {
-    const price = it.price && it.price !== shared.price ? formatPrice(it.price) : '';
+    const price = sizedPrice(it, window.MENU_DATA || []) || (it.price && it.price !== shared.price ? formatPrice(it.price) : '');
     const desc = it.desc !== shared.desc ? it.desc : '';
     const note = conf.hideNote ? '' : it.note;
     return `
@@ -106,7 +126,7 @@ function itemText(it, conf, shared) {
         </div>
         ${desc ? `<div class="item-en">${escapeHtml(desc)}</div>` : ''}
         ${note ? `<div class="item-note">${escapeHtml(note)}</div>` : ''}
-        ${(VARIANTS[it.title] || []).map(v => `<div class="item-option">${escapeHtml(optionText(it, v, window.MENU_DATA || []))}</div>`).join('')}`;
+        ${(VARIANTS[it.title] || []).filter(v => v.label).map(v => `<div class="item-option">${escapeHtml(optionText(it, v, window.MENU_DATA || []))}</div>`).join('')}`;
 }
 
 function renderSection(conf, items) {
@@ -178,7 +198,7 @@ function render() {
             .map(([conf, items]) => renderSection(conf, items))
             .join('');
         return `
-            <section class="page" data-group="${escapeHtml(page.label)}">
+            <section class="page" data-group="${escapeHtml(page.label + ':' + page.sections.map(c => c.cols || 0).join(','))}">
                 <header class="page-header">
                     <h2 class="page-title">${escapeHtml(page.label)}</h2>
                     <span class="page-sub">${escapeHtml(page.sub || '')}</span>
@@ -197,7 +217,14 @@ function fitPages() {
     document.querySelectorAll('.page').forEach(page => {
         const body = page.querySelector('.page-body');
         if (!body) return;
-        const overflows = () => body.scrollHeight > body.clientHeight + 1;
+        // 中身の高さ (各グループ + 最小の間隔) がページ本文の高さを超えるか。
+        // 端数の誤差ではみ出さないよう 4px の余裕を持たせる
+        const overflows = () => {
+            const items = [...body.children];
+            const gap = parseFloat(getComputedStyle(body).rowGap) || 0;
+            const need = items.reduce((sum, el) => sum + el.offsetHeight, 0) + gap * Math.max(0, items.length - 1);
+            return need > body.clientHeight - 4;
+        };
         let ph = 1, fs = 1;
         page.style.removeProperty('--ph');
         page.style.removeProperty('--fs');
@@ -205,12 +232,12 @@ function fitPages() {
         while (!overflows() && ph < 1.33) { ph = +(ph + 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         while (overflows() && ph > 0.7) { ph = +(ph - 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         if (!page.querySelector('.card')) {
-            while (!overflows() && fs < 1.3) { fs = +(fs + 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
+            while (!overflows() && fs < 1.6) { fs = +(fs + 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
         }
         while (overflows() && fs > 0.8) { fs = +(fs - 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
     });
 
-    // 同じタイトルのページ (Food 1・2 など) は写真と文字の大きさをそろえる (小さい方に合わせる)
+    // 同じタイトルで列構成も同じページは、写真と文字の大きさをそろえる (小さい方に合わせる)
     const groups = {};
     document.querySelectorAll('.page[data-group]').forEach(page => (groups[page.dataset.group] ||= []).push(page));
     Object.values(groups).forEach(pages => {
