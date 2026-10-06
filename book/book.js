@@ -9,6 +9,7 @@
 // フード・スイーツは種類と雰囲気でグループ分けする (items: スプレッドシートの商品名)。
 // どのグループにも入っていない商品は、rest: true のグループ (「その他」) に自動で入る。
 // cols は写真カードの列数。photos: false のセクションは写真を使わず文字だけで載せる。
+// inlineList: true は、写真のない商品を写真カードの空いた枠に並べる。
 const PAGES = [
     { type: 'cover' },
     { label: 'Drinks', sub: 'ドリンク', sections: [
@@ -35,18 +36,18 @@ const PAGES = [
     //   side-right: 主役を右に大きく、ほかを左に縦に並べる
     //   top:        主役をページ幅いっぱいに大きく、ほかを下に横に並べる
     //   trio:       主役3品を大きく横に並べ、ほかを下に小さく並べる (hero に3品を指定)
-    //   wide:       主役を幅の約2/3で大きく、ほか1品を横に並べる
+    //   wide:       主役を幅の約2/3で大きく、ほかを右に縦に積む
     // badge を指定すると、主役の写真にバッジを付ける
     { label: 'Food', sub: 'フード', sections: [
         { key: 'food', layout: 'wide', hero: '華麗なカレーとドライなカレー', badge: 'RECOMMEND', title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
           items: ['華麗なカレーとドライなカレー', 'クリームどんちゃん'] },
-        { key: 'food', layout: 'side', hero: 'ブルックリンブランチ', badge: 'RECOMMEND', title: 'Toast', sub: 'トースト', mood: 'ブランチにぴったりの一皿',
-          items: ['ブルーチーズバナナトースト', 'ピザトースト(バゲット)', 'ブルックリンブランチ'] },
-    ] },
-    { label: 'Food', sub: 'フード', sections: [
         { key: 'food', layout: 'side', hero: 'たまごっちサンド', badge: 'RECOMMEND', title: 'Sandwich & Hotdog', sub: 'サンド・ホットドッグ', mood: '片手で気軽に',
           items: ['ニューヨークホットドック', 'あんバターサンド', 'たまごっちサンド'] },
-        { key: 'food', cols: 2, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
+    ] },
+    { label: 'Food', sub: 'フード', sections: [
+        { key: 'food', layout: 'wide', hero: 'ブルックリンブランチ', badge: 'RECOMMEND', title: 'Toast', sub: 'トースト', mood: 'ブランチにぴったりの一皿',
+          items: ['ブルーチーズバナナトースト', 'ピザトースト(バゲット)', 'ブルックリンブランチ'] },
+        { key: 'food', cols: 3, inlineList: true, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
           items: ['バタートースト', 'マクドみたいなポテト', 'ポテトチップス'] },
         { key: 'food', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
@@ -58,7 +59,7 @@ const PAGES = [
           items: ['手作りキャロットケーキ', 'チーズケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'] },
     ] },
     { label: 'Sweets', sub: 'スイーツ', sections: [
-        { key: 'sweets', layout: 'top', hero: 'チャンキーアイスクリーム', title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
+        { key: 'sweets', cols: 2, title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
           items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
         { key: 'sweets', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
@@ -194,8 +195,8 @@ function renderSection(conf, items) {
                 ${conf.mood ? `<span class="section-mood">${escapeHtml(conf.mood)}</span>` : ''}
                 ${shared.price ? `<span class="section-price">${escapeHtml(formatPrice(shared.price))}</span>` : ''}
             </h3>` : ''}
-            ${cards ? `<div class="cards${conf.layout ? ` layout-${conf.layout}` : ''}" style="--cols: ${conf.cols || 3}; --rest: ${Math.max(1, withPhoto.length - heroCount)}">${cards}</div>` : ''}
-            ${list ? `<ul class="list">${list}</ul>` : ''}
+            ${cards ? `<div class="cards${conf.layout ? ` layout-${conf.layout}` : ''}" style="--cols: ${conf.cols || 3}; --rest: ${Math.max(1, withPhoto.length - heroCount)}">${cards}${conf.inlineList && list ? `<ul class="list list-inline">${list}</ul>` : ''}</div>` : ''}
+            ${list && !(conf.inlineList && cards) ? `<ul class="list">${list}</ul>` : ''}
         </section>`;
 }
 
@@ -347,4 +348,9 @@ render();
 fitPages();
 if (document.fonts) document.fonts.ready.then(fitPages);
 window.addEventListener('load', fitPages);
+// フォントや画像の読み込みが遅れて高さが変わることがあるので、少し後にもう一度確かめる
+[500, 1500, 3000].forEach(ms => setTimeout(() => {
+    const overflowing = [...document.querySelectorAll('.page-body')].some(b => b.scrollHeight > b.clientHeight + 1);
+    if (overflowing) fitPages();
+}, ms));
 window.addEventListener('beforeprint', fitPages);

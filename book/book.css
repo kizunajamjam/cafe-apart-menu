@@ -233,6 +233,13 @@ body {
 
 .cards + .list { margin-top: calc(5mm * var(--fs)); }
 
+/* 写真カードの空いた枠に入れる文字だけのリスト */
+.list.list-inline {
+    grid-template-columns: 1fr;
+    align-content: center;
+    margin: 0;
+}
+
 .section-kids .list { grid-template-columns: repeat(3, 1fr); }
 
 /* カードは幅が狭いので、名前と価格が1行に入らない時は価格を次の行の右端へ回す
@@ -273,9 +280,7 @@ body {
 
 .layout-side .is-hero .card-photo,
 .layout-side-right .is-hero .card-photo {
-    flex: 1;
-    aspect-ratio: auto;
-    min-height: 40mm;
+    aspect-ratio: 4 / calc(3 * var(--ph));
 }
 
 /* 小さいカードは横長 (写真左・文字右) */
@@ -314,15 +319,22 @@ body {
 .layout-top .is-hero { grid-column: 1 / -1; }
 .layout-top .is-hero .card-photo { aspect-ratio: 16 / calc(9 * var(--ph)); }
 
-/* wide: 主役を幅の約2/3で大きく、ほか1品を横に (写真の高さをそろえる) */
+/* wide: 主役を幅の約2/3で大きく、ほかを右に縦に積む (全体の高さを主役にそろえる) */
 .cards.layout-wide {
     grid-template-columns: 1.8fr 1fr;
-    gap: 0 6mm;
+    gap: calc(4mm * var(--fs)) 6mm;
 }
+.layout-wide .is-hero { grid-column: 1; grid-row: 1 / span var(--rest); }
+.layout-wide .card:not(.is-hero) { grid-column: 2; }
 .layout-wide .card:not(.is-hero) .card-photo {
     flex: 1;
     aspect-ratio: auto;
-    min-height: 30mm;
+    min-height: 20mm;
+}
+/* 画像の本来の高さで枠が伸びないよう、枠いっぱいに敷く (高さは主役に合わせる) */
+.layout-wide .card:not(.is-hero) .card-photo img {
+    position: absolute;
+    inset: 0;
 }
 .layout-wide .card:not(.is-hero) .item-name { font-size: calc(10.5pt * var(--fs)); }
 .layout-wide .card:not(.is-hero) .item-price { font-size: calc(11pt * var(--fs)); }
