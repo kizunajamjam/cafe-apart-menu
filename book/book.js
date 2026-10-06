@@ -45,7 +45,6 @@ const PAGES = [
         { key: 'sweets', cols: 2, title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
           items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
         { key: 'sweets', cols: 2, title: 'Others', sub: 'その他', rest: true },
-        { key: 'limited', cols: 1, title: 'Limited', sub: '期間限定', mood: 'いまだけのお楽しみ' },
     ] },
     // 裏表紙
     { label: 'Kids', sub: 'キッズメニュー',
