@@ -137,7 +137,7 @@ const photoKey = img => {
     const base = (img || '').replace(/\\/g, '/').split('/').pop().replace(/\.[^.]+$/, '');
     return base.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 };
-// 写真ごとの切り抜きの中心と拡大率 (photos/manifest.js)
+// 写真ごとの切り抜き位置と拡大率 (photos/manifest.js)
 const PHOTOS = window.BOOK_PHOTOS || {};
 const hasPhoto = it => photoKey(it.img) in PHOTOS;
 // 元写真のまま保存してあるので、表示する枠に合わせてここで1回だけ切り抜く

@@ -38,7 +38,7 @@ book/photos/<名前>.jpg     加工済み（自動生成）
   確認用の一覧（4:3 で切り抜いた見え方）が `photos/contact-sheet.jpg` にできます。
 - `<名前>` はスプレッドシートの img 列のファイル名を小文字・ハイフン区切りにしたもの（例: `Egg Sandwich HALF.jpg` → `egg-sandwich-half.jpg`）。
 - **撮り直した写真の差し替え**: 同じ名前で `photos/source/` に上書きして `npm run photos`。
-- 写真の写したくない部分が入る・寄りすぎる場合は `photos/crop.json` で `x` `y`（切り抜く中心、0〜1）と `zoom`（1 = 枠いっぱい、大きいほど寄る）を調整して `npm run photos`。
+- 写真の写したくない部分が入る・料理が切れる場合は `photos/crop.json` で `x` `y`（どちらに寄せて切り抜くか。0 = 左・上、0.5 = 真ん中、1 = 右・下）と `zoom`（1 = 枠いっぱい、大きいほど寄る）を調整して `npm run photos`。`photos/contact-sheet.jpg` で見え方を確認できる。
 - 新しい商品に写真を付ける: スプレッドシートの img 列にファイル名を入れ、同じ名前（slug 化後）で `photos/source/` に写真を置く。
 - 今の写真は、HP の git 履歴から最も解像度の高い版を取り込んだもの（`npm run photos:import`）。
 

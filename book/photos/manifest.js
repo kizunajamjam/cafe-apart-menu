@@ -1,5 +1,5 @@
 // 自動生成ファイル: scripts/process-photos.py で更新されます
-// 写真ごとの切り抜きの中心 (x, y: 0〜1) と拡大率 (zoom)。photos/crop.json から
+// 写真ごとの切り抜き位置 (x, y: 0 = 左・上に寄せる〜1 = 右・下に寄せる) と拡大率 (zoom)。photos/crop.json から
 window.BOOK_PHOTOS = {
  "affogato": {
   "x": 0.6,
@@ -98,7 +98,7 @@ window.BOOK_PHOTOS = {
  },
  "egg-sandwich": {
   "x": 0.5,
-  "y": 0.5,
+  "y": 0.2,
   "zoom": 1
  },
  "espresso-tonic": {

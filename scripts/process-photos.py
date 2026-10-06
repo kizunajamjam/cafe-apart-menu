@@ -7,7 +7,7 @@
 photos/source/<名前>.jpg を読み、次の処理をして book/photos/<名前>.jpg に書き出す。
   1. 色味をそろえる (ホワイトバランス・明るさ・コントラスト・彩度を控えめに補正)
   2. 長辺 1600px に縮小 (構図は切り抜かず、元写真のまま)
-切り抜きはメニュー側で表示する枠に合わせて1回だけ行う。どこを中心に切り抜くか (x, y) と
+切り抜きはメニュー側で表示する枠に合わせて1回だけ行う。どちらに寄せて切り抜くか (x, y) と
 拡大率 (zoom) は photos/crop.json で商品ごとに調整し、book/photos/manifest.js に書き出す。
 料理の形や盛り付けは変えない (補正は色と明るさだけ)。
 """
@@ -50,12 +50,16 @@ def normalize_color(im):
 
 
 def preview(im, f, w, h):
-    """メニューの表示 (object-fit: cover + 中心 + 拡大率) と同じ切り抜き"""
-    scale = max(w / im.width, h / im.height) * f['zoom']
-    r = im.resize((round(im.width * scale), round(im.height * scale)))
-    left = min(max(f['x'] * r.width - w / 2, 0), r.width - w)
-    top = min(max(f['y'] * r.height - h / 2, 0), r.height - h)
-    return r.crop((round(left), round(top), round(left) + w, round(top) + h))
+    """メニューの表示と同じ切り抜き
+    (CSS の object-fit: cover + object-position: x% y% + transform: scale(zoom) [基準点も x% y%])"""
+    scale = max(w / im.width, h / im.height)
+    rw, rh = im.width * scale, im.height * scale
+    ox, oy = f['x'] * w, f['y'] * h                 # 枠の中の基準点
+    px, py = f['x'] * (rw - w) + ox, f['y'] * (rh - h) + oy   # 基準点に来る画像上の位置
+    z = f['zoom']
+    box = ((px - ox / z) / scale, (py - oy / z) / scale,
+           (px + (w - ox) / z) / scale, (py + (h - oy) / z) / scale)
+    return im.resize((w, h), Image.LANCZOS, box=box)
 
 
 def main():
@@ -79,7 +83,7 @@ def main():
     # ブック側で「写真がある商品」を判定するための一覧
     with open(os.path.join(OUT, 'manifest.js'), 'w', encoding='utf-8') as fh:
         fh.write('// 自動生成ファイル: scripts/process-photos.py で更新されます\n')
-        fh.write('// 写真ごとの切り抜きの中心 (x, y: 0〜1) と拡大率 (zoom)。photos/crop.json から\n')
+        fh.write('// 写真ごとの切り抜き位置 (x, y: 0 = 左・上に寄せる〜1 = 右・下に寄せる) と拡大率 (zoom)。photos/crop.json から\n')
         fh.write('window.BOOK_PHOTOS = ' + json.dumps(focus, ensure_ascii=False, indent=1) + ';\n')
 
     if '--sheet' in sys.argv:
