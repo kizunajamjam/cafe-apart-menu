@@ -15,6 +15,21 @@ const SECTIONS = {
 // スプレッドシート（ホームページ）には載せるが、印刷メニューには出さない品目
 const HIDDEN_TITLES = ['頑張るアルバイトさん'];
 
+// 別の商品として載せず、元の商品に「〜に変更可能」と書くもの (変更後の商品名: 表示する文)
+const VARIANTS = {
+    '華麗なカレーとドライなカレー': [{ title: '華麗なカレーと激ウマバケット', label: 'ドライカレーをバゲットに変更可能' }],
+};
+const VARIANT_TITLES = Object.values(VARIANTS).flat().map(v => v.title);
+
+// 変更後の価格の差 (同じなら「同価格」、高ければ「+¥100」)
+function optionText(base, variant, allData) {
+    const v = allData.find(it => it.title === variant.title);
+    const toNum = p => parseInt(String(p || '').replace(/[^\d]/g, ''), 10);
+    if (!v || isNaN(toNum(v.price)) || isNaN(toNum(base.price))) return variant.label;
+    const diff = toNum(v.price) - toNum(base.price);
+    return `${variant.label}（${diff === 0 ? '同価格' : (diff > 0 ? '+' : '−') + '¥' + Math.abs(diff).toLocaleString()}）`;
+}
+
 const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ホームページと同じく 4桁以上の数字にカンマを付ける (¥1000 → ¥1,000)
@@ -44,6 +59,7 @@ function renderSection(key, items) {
                     ${price ? `<span class="leader"></span><span class="item-price">${escapeHtml(price)}</span>` : ''}
                 </div>
                 ${desc || note ? `<div class="item-sub">${desc ? `<span class="item-en">${escapeHtml(desc)}</span>` : ''}${note ? `<span class="item-note">${escapeHtml(note)}</span>` : ''}</div>` : ''}
+                ${(VARIANTS[it.title] || []).map(v => `<div class="item-option">${escapeHtml(optionText(it, v, window.MENU_DATA || []))}</div>`).join('')}
             </li>`;
     }).join('');
 
@@ -59,7 +75,7 @@ function renderSection(key, items) {
 }
 
 function render() {
-    const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title));
+    const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title) && !VARIANT_TITLES.includes(it.title));
     document.querySelectorAll('[data-sections]').forEach(el => {
         el.innerHTML = el.dataset.sections.split(/\s+/)
             .map(key => [key, data.filter(it => it.category === key)])

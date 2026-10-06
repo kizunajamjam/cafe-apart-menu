@@ -11,8 +11,8 @@
 const PAGES = [
     { type: 'cover' },
     { label: 'Food', sub: 'フード', sections: [
-        { key: 'food', cols: 3, title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
-          items: ['華麗なカレーとドライなカレー', '華麗なカレーと激ウマバケット', 'クリームどんちゃん'] },
+        { key: 'food', cols: 2, title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
+          items: ['華麗なカレーとドライなカレー', 'クリームどんちゃん'] },
         { key: 'food', cols: 3, title: 'Toast', sub: 'トースト', mood: 'ブランチにぴったりの一皿',
           items: ['ブルーチーズバナナトースト', 'ピザトースト(バゲット)', 'ブルックリンブランチ'] },
     ] },
@@ -54,6 +54,21 @@ const PAGES = [
 // スプレッドシート（ホームページ）には載せるが、メニューには出さない品目
 const HIDDEN_TITLES = ['頑張るアルバイトさん'];
 
+// 別の商品として載せず、元の商品に「〜に変更可能」と書くもの (変更後の商品名: 表示する文)
+const VARIANTS = {
+    '華麗なカレーとドライなカレー': [{ title: '華麗なカレーと激ウマバケット', label: 'ドライカレーをバゲットに変更可能' }],
+};
+const VARIANT_TITLES = Object.values(VARIANTS).flat().map(v => v.title);
+
+// 変更後の価格の差 (同じなら「同価格」、高ければ「+¥100」)
+function optionText(base, variant, allData) {
+    const v = allData.find(it => it.title === variant.title);
+    const toNum = p => parseInt(String(p || '').replace(/[^\d]/g, ''), 10);
+    if (!v || isNaN(toNum(v.price)) || isNaN(toNum(base.price))) return variant.label;
+    const diff = toNum(v.price) - toNum(base.price);
+    return `${variant.label}（${diff === 0 ? '同価格' : (diff > 0 ? '+' : '−') + '¥' + Math.abs(diff).toLocaleString()}）`;
+}
+
 const SHOP = {
     address: '大阪府茨木市駅前4-6-7（JR・阪急茨木駅 徒歩10分）',
     hours: '9:30 – 18:30（L.O. 18:00）',
@@ -90,7 +105,8 @@ function itemText(it, conf, shared) {
             ${price ? `<span class="leader"></span><span class="item-price">${escapeHtml(price)}</span>` : ''}
         </div>
         ${desc ? `<div class="item-en">${escapeHtml(desc)}</div>` : ''}
-        ${note ? `<div class="item-note">${escapeHtml(note)}</div>` : ''}`;
+        ${note ? `<div class="item-note">${escapeHtml(note)}</div>` : ''}
+        ${(VARIANTS[it.title] || []).map(v => `<div class="item-option">${escapeHtml(optionText(it, v, window.MENU_DATA || []))}</div>`).join('')}`;
 }
 
 function renderSection(conf, items) {
@@ -151,7 +167,7 @@ function sectionItems(conf, data) {
 }
 
 function render() {
-    const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title));
+    const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title) && !VARIANT_TITLES.includes(it.title));
     let pageNo = 0;
     document.getElementById('book').innerHTML = PAGES.map(page => {
         pageNo++;

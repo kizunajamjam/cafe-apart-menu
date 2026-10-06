@@ -223,6 +223,18 @@ body {
     color: var(--text-muted);
 }
 
+/* 「〜に変更可能」の案内 */
+.item-option {
+    display: inline-block;
+    margin-top: 1mm;
+    padding: 0.4mm 2.2mm;
+    border: 0.3mm solid var(--accent-color);
+    border-radius: 3mm;
+    font-size: calc(7pt * var(--fs));
+    color: var(--primary-color);
+    letter-spacing: 0.03em;
+}
+
 /* T2 / 期間限定はカードで少し目立たせる */
 .section-t2,
 .section-limited {
