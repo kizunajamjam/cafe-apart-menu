@@ -8,7 +8,7 @@
   "egg-sandwich":        { "x": 0.5,  "y": 0.2 },
   "curry":               { "x": 0.5,  "y": 0.78, "zoom": 1.2 },
   "matcha-latte":        { "y": 0.58 },
-  "parfait":             { "y": 0.58 },
+  "parfait":             { "y": 0.22 },
   "pizza-toast":         { "x": 0.42, "y": 0.95, "zoom": 2.0 },
   "shoratamarantarou":   { "x": 0.48, "y": 0.5,  "zoom": 1.6 },
   "teacider":            { "y": 0.58 }

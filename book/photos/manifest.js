@@ -158,7 +158,7 @@ window.BOOK_PHOTOS = {
  },
  "parfait": {
   "x": 0.5,
-  "y": 0.58,
+  "y": 0.22,
   "zoom": 1
  },
  "pizza-toast": {
