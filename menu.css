@@ -1,0 +1,295 @@
+/* =========================================
+   cafe apart - Menu (A4 portrait, print-first)
+   色・フォントはホームページ (cafe-apart-hp/style.css) に合わせている
+   ========================================= */
+
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #d4a373;
+    --logo-orange: #f39800;
+    --logo-teal: #14a596;
+    --bg-paper: #fefcfb;
+    --bg-sand: #f4f1ea;
+    --text-main: #333333;
+    --text-muted: #777777;
+    --rule: rgba(44, 62, 80, 0.18);
+
+    --font-en: 'Outfit', sans-serif;
+    --font-ja: 'Zen Kaku Gothic New', sans-serif;
+    --font-display: 'Playfair Display', serif;
+
+    --page-w: 210mm;
+    --page-h: 297mm;
+    --page-pad: 14mm;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-ja);
+    color: var(--text-main);
+    background: #d9d6cf;
+    -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ---------- 画面用ツールバー ---------- */
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 13px;
+}
+
+.toolbar button {
+    font: inherit;
+    font-weight: 500;
+    padding: 6px 18px;
+    border: none;
+    border-radius: 30px;
+    background: var(--accent-color);
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ---------- ページ ---------- */
+.page {
+    width: var(--page-w);
+    height: var(--page-h);
+    margin: 24px auto;
+    padding: var(--page-pad);
+    background: var(--bg-paper);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 内側の細い枠線 */
+.page::before {
+    content: '';
+    position: absolute;
+    inset: 7mm;
+    border: 0.3mm solid var(--rule);
+    pointer-events: none;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 4mm;
+}
+
+.logo {
+    height: 18mm;
+    width: auto;
+}
+
+.page-label {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13pt;
+    letter-spacing: 0.08em;
+    color: var(--primary-color);
+    margin-top: 1mm;
+}
+
+.page-label::before,
+.page-label::after {
+    content: '';
+    display: inline-block;
+    width: 14mm;
+    height: 0.3mm;
+    background: var(--accent-color);
+    vertical-align: middle;
+    margin: 0 4mm;
+}
+
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10mm;
+    flex: 1;
+    min-height: 0;
+    padding: 0 3mm;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 6mm;
+}
+
+/* ---------- セクション ---------- */
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 0.4mm solid var(--primary-color);
+    padding-bottom: 1.2mm;
+}
+
+.section-en {
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: 13pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+.section-price {
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: 9.5pt;
+    color: var(--primary-color);
+}
+
+.section-sub {
+    font-size: 7pt;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-top: 1mm;
+}
+
+.items {
+    list-style: none;
+    margin-top: 2.5mm;
+}
+
+.item {
+    padding: 1.1mm 0;
+    break-inside: avoid;
+}
+
+.item-line {
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+}
+
+.item-name {
+    font-weight: 500;
+    font-size: 9.5pt;
+    color: var(--primary-color);
+}
+
+.leader {
+    flex: 1;
+    border-bottom: 0.3mm dotted rgba(44, 62, 80, 0.35);
+    transform: translateY(-1mm);
+    min-width: 4mm;
+}
+
+.item-price {
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: 9.5pt;
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.item-sub {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 2.5mm;
+    line-height: 1.45;
+    margin-top: 0.3mm;
+}
+
+.item-en {
+    font-family: var(--font-en);
+    font-size: 7pt;
+    letter-spacing: 0.04em;
+    color: var(--accent-color);
+}
+
+.item-note {
+    font-size: 7pt;
+    color: var(--text-muted);
+}
+
+/* T2 / 期間限定はカードで少し目立たせる */
+.section-t2,
+.section-limited {
+    background: var(--bg-sand);
+    border-radius: 2mm;
+    padding: 4mm 4.5mm;
+}
+
+.section-limited .section-title {
+    border-bottom-color: var(--logo-orange);
+}
+
+.section-limited .section-en {
+    color: var(--logo-orange);
+}
+
+/* ---------- キッズ (下部の帯) ---------- */
+.band {
+    margin: 4mm 3mm 0;
+}
+
+.band:empty { display: none; }
+
+.band .section {
+    background: var(--bg-sand);
+    border-radius: 2mm;
+    padding: 4mm 4.5mm;
+}
+
+.band .section-en { color: var(--logo-teal); }
+.band .section-title { border-bottom-color: var(--logo-teal); }
+
+.band .items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 6mm;
+}
+
+/* ---------- フッター ---------- */
+.page-footer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2mm 6mm;
+    margin-top: 5mm;
+    padding-top: 3mm;
+    border-top: 0.3mm solid var(--rule);
+    font-family: var(--font-en);
+    font-size: 7pt;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+/* ---------- 印刷 ---------- */
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+    body { background: none; }
+    .no-print { display: none !important; }
+    .page {
+        margin: 0;
+        box-shadow: none;
+        break-after: page;
+    }
+    .page:last-child { break-after: auto; }
+}
+
+/* ---------- 狭い画面ではページを縮小表示 ---------- */
+@media screen and (max-width: 840px) { .page { zoom: 0.75; } }
+@media screen and (max-width: 640px) { .page { zoom: 0.55; } }
+@media screen and (max-width: 480px) { .page { zoom: 0.45; } }
+@media screen and (max-width: 390px) { .page { zoom: 0.4; } }

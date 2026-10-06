@@ -1,0 +1,10 @@
+{
+  "name": "cafe-apart-menu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "cafe apart 店頭用メニュー表（A4・印刷用）",
+  "scripts": {
+    "sync": "node scripts/sync-menu.mjs",
+    "start": "npx --yes serve -l 4174 ."
+  }
+}

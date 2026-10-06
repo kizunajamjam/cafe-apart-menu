@@ -1,0 +1,55 @@
+category,img,title,desc,price,note
+drink,assets\images\coffee.jpg,気合の一杯,Coffee,¥500,店主が必死で淹れる一杯
+drink,assets\images\americano.jpg,カフェアメリカーノ,Americano (iced/hot),¥500,こだわり豆のアメリカーノコーヒー
+drink,assets\images\Espresso.jpg,エスプレッソ,Espresso,¥300,本格エスプレッソマシン抽出
+drink,assets\images\Espresso Tonic.jpg,エスプレッソトニック,Espresso Tonic,¥700,トニックを使ったアレンジメニュー
+drink,assets\images\latte.jpg,カフェラテ,Latte (iced hot),¥600,エスプレッソとスチームミルクのランデヴー
+drink,assets\images\Matcha Latte.jpg,抹茶ラテ,Matcha Latte (iced/hot),¥600,世界で人気の抹茶は日本で不足中
+drink,assets\images\lemonade.jpg,自家製レモネード,Lemonade,¥600,嫌な事忘れる手作りレモネード
+drink,assets\images\banana-juice.jpg,手作りバナナジュース,Banana Juice,¥600,モンキーな気分
+drink,,オレンジジュース,Orange Juice,¥500,100%
+drink,,アップルジュース,Apple Juice,¥500,100%
+drink,,ジンジャーエール,Ginger Ale,¥500,神社声援
+drink,,コカ・コーラ,Coca-Cola,¥500,爽やかテイスティー  I feel coke
+drink,assets\images\Cream Soda.jpg,クリームソーダ,Cream Soda,¥600,懐かしの喫茶ドリンク
+drink,assets\images\Beer.jpg,瓶ビール,Beer,¥800,サッポロ黒ラベル（小瓶）
+drink,assets\images\Highball.jpg,ハイボール,Highball,¥800,ウイスキーはお好きでしょ
+T2,,ふんわりバニラのメルボルンブレックファースト,T2 Tea,Cup ¥700 / Pot ¥1000,バニラが豊かに香るT2の代表ティー
+T2,,フローラルなフレンチアールグレイ,T2 Tea,Cup ¥700 / Pot ¥1000,フレンチ流にアレンジしたT2のアールグレイはとってもフローラル
+T2,,フルーティーなパックス・ア・ピーチ,T2 Tea,Cup ¥700 / Pot ¥1000,ピーチ、パパイヤ、アップル、焙煎されたチコリーが創り出すフルーティなブレンド
+T2,,スパイシーなオーガニックチャイ,T2 Tea,Cup ¥700 / Pot ¥1000,厳選されたスパイスをブレンドしたオーガニックでヘルシーな味わい
+T2,assets\images\Royal Milk Tea.jpg,ロイヤルミルクティー,Royal Milk Tea,¥800,優雅なミルクティーをT2で
+T2,assets\images\teacider.jpg,T2ティーサイダー,Tea Cider,¥800,シュワワなティードリンク
+food,assets\images\curry.jpg,華麗なカレーとドライなカレー,Original Curry,"¥1,000",リピ確定のフルーティでスパイシーなオリジナルカレー
+food,assets\images\CurryBaguette.jpg,華麗なカレーと激ウマバケット,Curry & Baguette,"¥1,000",天然酵母・国産小麦で一つ一つ作ったバケットをカレーにディップして
+food,assets\images\creamy-salmon.jpg,クリームどんちゃん,Salmon Cream UDON,"¥1,000",クリーミーで濃厚な特製サーモンクリームうどん
+food,assets\images\ToastwithButter.jpg,バタートースト,Toast with Butter,¥400,シンプルなぶ厚めのトースト
+food,assets\images\hotdog.jpg,ニューヨークホットドック,Hotdog,¥680,気分はマンハッタンのビジネスパーソン
+food,assets\images\An-Butter Sandwich.jpg,あんバターサンド,An-Butter Sandwich,¥680,御座候の粒あんとバターのハーモニーが病みつきに
+food,assets\images\BluecheeseBanana Toast.jpg,ブルーチーズバナナトースト,Bluecheese & Banana Toast,¥680,ヌテラをベースにバナナとブルーチーズでファンの多いトーストメニュー
+food,assets\images\Pizza Toast.jpg,ピザトースト(バゲット),Pizza Toast,¥680,2種類のチーズとサラミ、ピーマン、マリネしたトマトがイタリアン
+food,assets\images\egg-sandwich.jpg,たまごっちサンド,Egg Sandwich,¥700,店内仕込みのたまごピューレが味の決め手
+food,assets\images\Egg Sandwich HALF.jpg,たまごっちハーフ,Egg Sandwich HALF,¥500,小腹用のたまごっち
+food,assets\images\Brooklyn Brunch.jpg,ブルックリンブランチ,Brooklyn Brunch,¥750,ちゃんと食事になるトーストメニュー
+food,assets\images\french-fries.jpg,マクドみたいなポテト,French Fries,¥500,マ◯ド越えを目指したみんなでシェアできる楽しいフライドポテト
+food,,ポテトチップス,Potato Chips,¥400,白黒包装のあいつ
+sweets,assets\images\carrot-cake.jpg,手作りキャロットケーキ,Carrot Cake,¥600,たくさんの人参を使ったホームメイドケーキ
+sweets,assets\images\Cheese Cake.jpg,チーズケーキ,Cheese Cake,¥600,フォトジェニックなチーズケーキ
+sweets,assets\images\Crepe.jpg,クレープ,Crepe,¥830,ボリューミーな贅沢おやつ
+sweets,assets\images\BananaCrepe.jpg,シングルクレープ（バナナ）,Single Crepe (Banana),¥680,クレープのマスターピース
+sweets,assets\images\LemonCrepe.jpg,シングルクレープ（レモン）,Single Crepe (Lemon),¥700,ハチミツ漬けレモンの優しさと刺激
+sweets,assets\images\SiratamaMatchaCrepe.jpg,シングルクレープ(白玉抹茶),Single Crepe (Matcha & Shiratama),¥750,御座候の粒あんも加えて茶房の味わい
+sweets,assets\images\IceCream.jpg,アイスクリーム,Ice Cream,¥500,昭和デザート
+sweets,assets\images\chunky-ice-cream.jpg,チャンキーアイスクリーム,Chunky Ice Cream,¥600,セサミストリートのキャラクターが可愛いスイーツに変身
+sweets,assets\images\Affogato.jpg,アフォガート,Affogato,¥600,バニラアイスとエスプレッソでおしゃれなカフェタイムを
+sweets,assets\images\parfait.jpg,ティラミス風パフェ,Tiramisu Parfait,¥600,コーヒーゼリーをティラミス風に仕立てたパフェ
+sweets,assets\images\Florentine.jpg,手作りフロランタン,Florentine,¥400,また食べたくなる手作り洋菓子
+sweets,assets\images\Brownie.jpg,手作り焦がしミルクチョコブラウニー,Brownie,¥400,つい食べたくなる手作り洋菓子
+sweets,assets\images\job.jpg,頑張るアルバイトさん,part-time job,¥プライスレス,apartのために全力投球
+kids,,バナナスティックケーキ,Kids Dessert,¥350,米粉でアレルギー対策
+kids,,国産豆乳プリンタルト,Kids Dessert,¥350,米粉でアレルギー対策
+kids,,ガトーショコラ,Kids Dessert,¥350,米粉でアレルギー対策
+kids,,国産りんごのタルト,Kids Dessert,¥350,米粉でアレルギー対策
+kids,,さつまいもと栗のタルト,Kids Dessert,¥350,米粉でアレルギー対策
+kids,,クレープ(みかんorヨーグルト),Kids Dessert,¥350,米粉でアレルギー対策
+limited,assets\images\shoratamarantarou.jpg,白玉乱太郎,,¥800,
