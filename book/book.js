@@ -12,7 +12,13 @@
 const PAGES = [
     { type: 'cover' },
     { label: 'Drinks', sub: 'ドリンク', sections: [
-        { key: 'drink', photos: false, title: 'Coffee & Drinks', sub: 'コーヒー・ドリンク' },
+        { key: 'drink', photos: false, title: 'Coffee & Latte', sub: 'コーヒー・ラテ', mood: 'ほっと一息つきたい時に',
+          items: ['気合の一杯', 'カフェアメリカーノ', 'エスプレッソ', 'エスプレッソトニック', 'カフェラテ', '抹茶ラテ'] },
+        { key: 'drink', photos: false, title: 'Juice & Soda', sub: 'ジュース・ソーダ', mood: 'さっぱりリフレッシュ',
+          items: ['自家製レモネード', '手作りバナナジュース', 'オレンジジュース', 'アップルジュース', 'ジンジャーエール', 'コカ・コーラ', 'クリームソーダ'] },
+        { key: 'drink', photos: false, title: 'Alcohol', sub: 'アルコール', mood: 'ゆっくり過ごす午後に',
+          items: ['瓶ビール', 'ハイボール'] },
+        { key: 'drink', photos: false, title: 'Others', sub: 'その他', rest: true },
     ] },
     // T2 は1ページの特集。large: 1列・大きめの文字
     { label: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド',
