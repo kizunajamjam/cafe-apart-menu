@@ -329,11 +329,4 @@ body {
 .temp + .temp { margin-left: 0.8mm; }
 .temp-ice { background: var(--logo-teal); }
 .temp-hot { background: var(--logo-orange); }
-.temp-legend {
-    font-size: 8pt;
-    color: var(--text-muted);
-    margin: 0 0 3mm;
-    text-align: right;
-}
-.temp-legend .temp { margin: 0 0.4mm 0 0; vertical-align: 0.3mm; }
-.section .temp-legend { text-align: left; font-size: 6.5pt; margin: 1.5mm 0 0; }
+.section 

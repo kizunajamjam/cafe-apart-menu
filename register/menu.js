@@ -67,7 +67,6 @@ function temps(desc) {
     return { list, desc: desc.replace(m[0], ' ').trim() };
 }
 const tempBadges = list => list.map(t => `<span class="temp temp-${t.toLowerCase()}">${t}</span>`).join('');
-const TEMP_LEGEND = `<p class="temp-legend">${tempBadges(['ICE', 'HOT'])} アイス・ホットを選べます</p>`;
 
 function renderSection(key, items) {
     const conf = SECTIONS[key] || { title: key, subtitle: '' };
@@ -97,7 +96,6 @@ function renderSection(key, items) {
                 ${shared ? `<span class="section-price">${escapeHtml(formatPrice(shared))}</span>` : ''}
             </h2>
             ${conf.subtitle ? `<p class="section-sub">${escapeHtml(conf.subtitle)}</p>` : ''}
-            ${items.some(it => temps(it.desc).list.length) ? TEMP_LEGEND : ''}
             <ul class="items">${rows}</ul>
         </div>`;
 }
