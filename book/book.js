@@ -295,9 +295,7 @@ function renderT2(page, data) {
 
 function render() {
     const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title) && !VARIANT_TITLES.includes(it.title));
-    let pageNo = 0;
     document.getElementById('book').innerHTML = PAGES.map(page => {
-        pageNo++;
         if (page.type === 'cover') return renderCover();
         const body = page.t2 ? renderT2(page, data) : page.sections
             .map(conf => [conf, sectionItems(conf, data)])
@@ -313,7 +311,6 @@ function render() {
                 </header>
                 ${page.intro ? `<p class="page-intro">${page.intro.split('\n').map(escapeHtml).join('<br>')}</p>` : ''}
                 <div class="page-body">${body}</div>
-                <footer class="page-footer">${pageNo}</footer>
             </section>`;
     }).join('');
 }

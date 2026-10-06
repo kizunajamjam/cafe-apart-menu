@@ -122,13 +122,6 @@ body {
 /* グループは縮ませない (収まらない時は book.js が写真・文字を小さくする) */
 .page-body > * { flex-shrink: 0; }
 
-.page-footer {
-    text-align: center;
-    font-family: var(--font-en);
-    font-size: 8pt;
-    color: var(--text-muted);
-    padding-top: 3mm;
-}
 
 /* ---------- セクション見出し (Tea & More ページ) ---------- */
 .section-title {
