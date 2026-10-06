@@ -342,6 +342,148 @@ body {
 .is-large .item-note { font-size: calc(8.5pt * var(--fs)); margin-top: 0.8mm; }
 .is-large .section-price { font-size: calc(12pt * min(var(--fs), 1.15)); }
 
+/* ---------- T2 特集ページ ---------- */
+.t2-hero {
+    position: relative;
+    height: calc(60mm * var(--fs));
+    border-radius: 2mm;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.t2-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 45%;
+    display: block;
+}
+
+.t2-hero-text {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 14mm 7mm 5mm;
+    background: linear-gradient(to top, rgba(30, 25, 20, 0.72), rgba(30, 25, 20, 0));
+    color: #fff;
+    font-size: calc(8.5pt * var(--fs));
+    line-height: 1.8;
+    letter-spacing: 0.04em;
+}
+
+.t2-hero-en {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: calc(13pt * var(--fs));
+    letter-spacing: 0.06em;
+    margin-bottom: 1mm;
+}
+
+.t2-price {
+    margin-left: auto;
+    padding: 0.8mm 3.5mm;
+    border-radius: 4mm;
+    background: var(--primary-color);
+    color: #fff;
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: calc(9.5pt * min(var(--fs), 1.15));
+    white-space: nowrap;
+}
+
+.tea-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(5mm * var(--fs)) 6mm;
+}
+
+.tea {
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+    padding: calc(3.5mm * var(--fs)) 4mm;
+    background: var(--bg-sand);
+    border-radius: 2mm;
+}
+
+.tea-art {
+    flex-shrink: 0;
+    width: calc(21mm * min(var(--fs), 1.15));
+    height: calc(21mm * min(var(--fs), 1.15));
+}
+
+.tea-art svg { width: 100%; height: 100%; display: block; }
+
+.tea-body { min-width: 0; }
+
+.tea-lead {
+    font-size: calc(7.5pt * min(var(--fs), 1.1));
+    letter-spacing: 0.06em;
+    color: var(--accent-color);
+}
+
+.tea-name {
+    font-weight: 700;
+    font-size: calc(9pt * min(var(--fs), 1.1));
+    white-space: nowrap;
+    line-height: 1.4;
+    color: var(--primary-color);
+}
+
+.tea-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2mm;
+    margin-top: 1.2mm;
+}
+
+.tea-tags span {
+    font-size: calc(6.5pt * var(--fs));
+    letter-spacing: 0.05em;
+    padding: 0.3mm 2mm;
+    border-radius: 3mm;
+    background: #fff;
+    color: var(--accent-color);
+    border: 0.25mm solid var(--accent-color);
+}
+
+.tea-note {
+    margin-top: 1.2mm;
+    font-size: calc(7pt * var(--fs));
+    line-height: 1.55;
+    color: var(--text-muted);
+    word-break: auto-phrase;
+    text-wrap: pretty;
+}
+
+.arrange-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6mm;
+}
+
+.arrange {
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+}
+
+.arrange-photo {
+    flex-shrink: 0;
+    width: calc(32mm * var(--fs));
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1mm solid var(--bg-sand);
+}
+
+.arrange-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.arrange-body { flex: 1; min-width: 0; }
+.arrange .item-line { flex-wrap: wrap; }
+.arrange .item-price { margin-left: auto; flex-shrink: 0; }
+.arrange .item-name { font-size: calc(10.5pt * min(var(--fs), 1.1)); }
+.arrange .item-price { font-size: calc(11pt * min(var(--fs), 1.1)); }
+
 /* ---------- 表紙 ---------- */
 .page-cover {
     justify-content: center;

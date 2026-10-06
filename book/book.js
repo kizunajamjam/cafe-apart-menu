@@ -20,13 +20,15 @@ const PAGES = [
           items: ['瓶ビール', 'ハイボール'] },
         { key: 'drink', photos: false, title: 'Others', sub: 'その他', rest: true },
     ] },
-    // T2 は1ページの特集。large: 1列・大きめの文字
-    { label: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド',
-      intro: 'cafe apart は、オーストラリア発の紅茶ブランド「T2」の取扱い店です。\n香りの違うティーを、カップでもポットでもお楽しみいただけます。',
+    // T2 は1ページの特集 (t2: true)。上部に写真、ティーセレクションはイメージイラスト付き (t2-art.js)、
+    // アレンジティーは写真付きで載せる
+    { label: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド', t2: true,
+      hero: { img: 'assets/t2-hero.jpg', en: 'From Melbourne, Australia',
+              text: 'cafe apart は、オーストラリア発の紅茶ブランド「T2」の取扱い店です。\n香りの違うティーを、カップでもポットでもお楽しみいただけます。' },
       sections: [
-        { key: 't2', photos: false, large: true, groupPrice: true, title: 'Tea Selection', sub: 'ティーセレクション',
+        { key: 't2', groupPrice: true, title: 'Tea Selection', sub: 'ティーセレクション',
           items: ['ふんわりバニラのメルボルンブレックファースト', 'フローラルなフレンチアールグレイ', 'フルーティーなパックス・ア・ピーチ', 'スパイシーなオーガニックチャイ'] },
-        { key: 't2', photos: false, large: true, title: 'Arrange', sub: 'アレンジティー', rest: true },
+        { key: 't2', title: 'Arrange', sub: 'アレンジティー', rest: true },
     ] },
     { label: 'Food', sub: 'フード', sections: [
         { key: 'food', cols: 2, title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
@@ -191,19 +193,72 @@ function sectionItems(conf, data) {
     return inCategory;
 }
 
+// 「ふんわりバニラのメルボルンブレックファースト」→ 添え書き「ふんわりバニラの」+ 名前「メルボルンブレックファースト」
+function teaTitle(title) {
+    const m = title.match(/^(.+?[のな])(.{4,})$/);
+    return m
+        ? `<p class="tea-lead">${escapeHtml(m[1])}</p><h4 class="tea-name">${escapeHtml(m[2])}</h4>`
+        : `<h4 class="tea-name">${escapeHtml(title)}</h4>`;
+}
+
+// T2 特集ページの本文
+function renderT2(page, data) {
+    const [selConf, arrConf] = page.sections;
+    const sel = sectionItems(selConf, data);
+    const arr = sectionItems(arrConf, data);
+    const shared = { price: commonValue(sel, 'price'), desc: commonValue(sel, 'desc') };
+    const heading = (conf, price) => `
+        <h3 class="section-title">
+            <span class="section-en">${escapeHtml(conf.title)}</span>
+            <span class="section-note">${escapeHtml(conf.sub)}</span>
+            ${price ? `<span class="t2-price">${escapeHtml(formatPrice(price))}</span>` : ''}
+        </h3>`;
+
+    const teas = sel.map(it => {
+        const art = (window.T2_ART || {})[it.title] || window.T2_ART_DEFAULT;
+        const price = it.price !== shared.price ? formatPrice(it.price) : '';
+        return `
+            <article class="tea">
+                <div class="tea-art">${art.svg}</div>
+                <div class="tea-body">
+                    ${teaTitle(it.title)}${price ? `<span class="item-price">${escapeHtml(price)}</span>` : ''}
+                    ${art.tags.length ? `<div class="tea-tags">${art.tags.map(t => `<span>${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+                    ${it.note ? `<p class="tea-note">${escapeHtml(it.note)}</p>` : ''}
+                </div>
+            </article>`;
+    }).join('');
+
+    const arranges = arr.map(it => `
+        <article class="arrange">
+            ${hasPhoto(it) ? `<div class="arrange-photo"><img src="photos/${photoKey(it.img)}.jpg" alt="${escapeHtml(it.title)}"></div>` : ''}
+            <div class="arrange-body">${itemText(it, {}, { price: '', desc: '' })}</div>
+        </article>`).join('');
+
+    return `
+        <div class="t2-hero">
+            <img src="${escapeHtml(page.hero.img)}" alt="T2 のティーセット">
+            <div class="t2-hero-text">
+                <p class="t2-hero-en">${escapeHtml(page.hero.en)}</p>
+                <p>${page.hero.text.split('\n').map(escapeHtml).join('<br>')}</p>
+            </div>
+        </div>
+        ${sel.length ? `<section class="section t2-selection">${heading(selConf, shared.price)}<div class="tea-grid">${teas}</div></section>` : ''}
+        ${arr.length ? `<section class="section t2-arrange">${heading(arrConf)}<div class="arrange-grid">${arranges}</div></section>` : ''}`;
+}
+
 function render() {
     const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title) && !VARIANT_TITLES.includes(it.title));
     let pageNo = 0;
     document.getElementById('book').innerHTML = PAGES.map(page => {
         pageNo++;
         if (page.type === 'cover') return renderCover();
-        const body = page.sections
+        const body = page.t2 ? renderT2(page, data) : page.sections
             .map(conf => [conf, sectionItems(conf, data)])
             .filter(([, items]) => items.length)
             .map(([conf, items]) => renderSection(conf, items))
             .join('');
         return `
-            <section class="page" data-group="${escapeHtml(page.label + ':' + page.sections.map(c => c.cols || 0).join(','))}">
+            <section class="page${page.t2 ? ' page-t2' : ''}" data-group="${escapeHtml(page.label + ':' + page.sections.map(c => c.cols || 0).join(','))}">
                 <header class="page-header">
                     <h2 class="page-title">${escapeHtml(page.label)}</h2>
                     <span class="page-sub">${escapeHtml(page.sub || '')}</span>
@@ -237,7 +292,8 @@ function fitPages() {
         while (!overflows() && ph < 1.33) { ph = +(ph + 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         while (overflows() && ph > 0.7) { ph = +(ph - 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         if (!page.querySelector('.card')) {
-            while (!overflows() && fs < 1.6) { fs = +(fs + 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
+            const maxFs = page.classList.contains('page-t2') ? 1.25 : 1.6;
+            while (!overflows() && fs < maxFs) { fs = +(fs + 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
         }
         while (overflows() && fs > 0.8) { fs = +(fs - 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
     });
