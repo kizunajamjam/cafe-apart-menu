@@ -5,12 +5,23 @@
  */
 
 // ページ構成 (8ページ = 4の倍数で中綴じできる)。
-// 表紙・ドリンク・T2・キッズ(裏表紙) は固定。フード・スイーツは2〜5ページの4ページに収める。
+// 順番: 表紙 → ドリンク → T2 → フード(2) → スイーツ(2) → キッズ(裏表紙)。フード・スイーツは4ページに収める。
 // フード・スイーツは種類と雰囲気でグループ分けする (items: スプレッドシートの商品名)。
 // どのグループにも入っていない商品は、rest: true のグループ (「その他」) に自動で入る。
 // cols は写真カードの列数。photos: false のセクションは写真を使わず文字だけで載せる。
 const PAGES = [
     { type: 'cover' },
+    { label: 'Drinks', sub: 'ドリンク', sections: [
+        { key: 'drink', photos: false, title: 'Coffee & Drinks', sub: 'コーヒー・ドリンク' },
+    ] },
+    // T2 は1ページの特集。large: 1列・大きめの文字
+    { label: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド',
+      intro: 'cafe apart は、オーストラリア発の紅茶ブランド「T2」の取扱い店です。\n香りの違うティーを、カップでもポットでもお楽しみいただけます。',
+      sections: [
+        { key: 't2', photos: false, large: true, groupPrice: true, title: 'Tea Selection', sub: 'ティーセレクション',
+          items: ['ふんわりバニラのメルボルンブレックファースト', 'フローラルなフレンチアールグレイ', 'フルーティーなパックス・ア・ピーチ', 'スパイシーなオーガニックチャイ'] },
+        { key: 't2', photos: false, large: true, title: 'Arrange', sub: 'アレンジティー', rest: true },
+    ] },
     { label: 'Food', sub: 'フード', sections: [
         { key: 'food', cols: 2, title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
           items: ['華麗なカレーとドライなカレー', 'クリームどんちゃん'] },
@@ -35,17 +46,6 @@ const PAGES = [
           items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
         { key: 'sweets', cols: 2, title: 'Others', sub: 'その他', rest: true },
         { key: 'limited', cols: 1, title: 'Limited', sub: '期間限定', mood: 'いまだけのお楽しみ' },
-    ] },
-    { label: 'Drinks', sub: 'ドリンク', sections: [
-        { key: 'drink', photos: false, title: 'Coffee & Drinks', sub: 'コーヒー・ドリンク' },
-    ] },
-    // T2 は1ページの特集。large: 1列・大きめの文字
-    { label: 'T2 Tea', sub: 'オーストラリア発の紅茶ブランド',
-      intro: 'cafe apart は、オーストラリア発の紅茶ブランド「T2」の取扱い店です。\n香りの違うティーを、カップでもポットでもお楽しみいただけます。',
-      sections: [
-        { key: 't2', photos: false, large: true, groupPrice: true, title: 'Tea Selection', sub: 'ティーセレクション',
-          items: ['ふんわりバニラのメルボルンブレックファースト', 'フローラルなフレンチアールグレイ', 'フルーティーなパックス・ア・ピーチ', 'スパイシーなオーガニックチャイ'] },
-        { key: 't2', photos: false, large: true, title: 'Arrange', sub: 'アレンジティー', rest: true },
     ] },
     // 裏表紙
     { label: 'Kids', sub: 'キッズメニュー',
