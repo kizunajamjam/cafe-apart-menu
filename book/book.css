@@ -350,6 +350,24 @@ body {
 .layout-wide .card:not(.is-hero) .item-en,
 .layout-wide .card:not(.is-hero) .item-note { font-size: calc(7.5pt * var(--fs)); }
 
+/* pair: 主役と1品を横に並べ、写真の高さ (主役の 4:3 に合わせる) と文字の位置をそろえる */
+.cards.layout-pair {
+    grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 0 6mm;
+}
+.layout-pair .card {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+}
+.layout-pair .card:not(.is-hero) .card-photo { aspect-ratio: auto; }
+.layout-pair .card:not(.is-hero) .card-photo img { position: absolute; inset: 0; }
+.layout-pair .card:not(.is-hero) .item-name { font-size: calc(11pt * var(--fs)); }
+.layout-pair .card:not(.is-hero) .item-price { font-size: calc(11pt * var(--fs)); }
+.layout-pair .card:not(.is-hero) .item-en,
+.layout-pair .card:not(.is-hero) .item-note { font-size: calc(8pt * var(--fs)); }
+
 /* trio: 主役3品を大きく横に並べ、ほかを下に小さく (写真左・文字右) */
 .cards.layout-trio {
     grid-template-columns: repeat(3, minmax(0, 1fr));

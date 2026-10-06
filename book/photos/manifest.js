@@ -72,9 +72,9 @@ window.BOOK_PHOTOS = {
   "zoom": 1
  },
  "creamy-salmon": {
-  "x": 0.5,
+  "x": 0.62,
   "y": 0.5,
-  "zoom": 1
+  "zoom": 1.25
  },
  "crepe": {
   "x": 0.5,
@@ -83,8 +83,8 @@ window.BOOK_PHOTOS = {
  },
  "curry": {
   "x": 0.5,
-  "y": 0.5,
-  "zoom": 1
+  "y": 0.78,
+  "zoom": 1.2
  },
  "currybaguette": {
   "x": 0.5,

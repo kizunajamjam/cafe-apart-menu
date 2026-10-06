@@ -48,7 +48,7 @@ book/photos/<名前>.jpg     加工済み（自動生成）
 - 別商品として載せず「〜に変更可能」と書く品目: 各 `*.js` の `VARIANTS`（例: カレーのバゲットは「変更可能（同価格）」、たまごっちハーフは「フル ¥700 / ハーフ ¥500」。価格はスプレッドシートから自動）
 - レジ用: どのカテゴリをどのページ・列に置くか → `register/index.html` の `data-sections`、見出し → `register/menu.js` の `SECTIONS`
 - ブック: ページ構成・グループ分け・列数 → `book/book.js` の `PAGES`（新商品はグループに入れるまで「その他」に出る）
-- ブックの大小を付けた配置: グループに `layout`（`side` / `side-right` / `top` / `trio` / `wide`）と主役の商品名 `hero`（trio は3品）を指定すると、主役を大きく、ほかを小さく並べる。`badge` で主役の写真にバッジ（例: HOMEMADE、RECOMMEND）。長い商品名の改行位置は `BREAK_HINTS`
+- ブックの大小を付けた配置: グループに `layout`（`side` / `side-right` / `top` / `trio` / `wide` / `pair`）と主役の商品名 `hero`（trio は3品）を指定すると、主役を大きく、ほかを小さく並べる。`badge` で主役の写真にバッジ（例: HOMEMADE、RECOMMEND）。長い商品名の改行位置は `BREAK_HINTS`
 - T2 ページ: 上部の写真は `book/assets/t2-hero.jpg`、紹介文は `book/book.js` の T2 ページの `hero`、ティーごとのイラストと香りのキーワードは `book/t2-art.js`（新しいティーは同じ商品名で追加。無ければティーカップの絵になる）
 - どちらも、ページに収まらない場合は自動で文字（ブックは先に写真の高さ）を縮めて収めます
 - T2 / Kids は共通価格を見出しに出し、各品目の価格は共通価格と違う場合のみ表示

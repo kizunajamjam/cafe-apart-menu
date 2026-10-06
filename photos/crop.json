@@ -4,6 +4,8 @@
   "beer":                { "y": 0.6 },
   "carrot-cake":         { "y": 0.68 },
   "chunky-ice-cream":    { "y": 0.6 },
+  "creamy-salmon":       { "x": 0.62, "y": 0.5,  "zoom": 1.25 },
+  "curry":               { "x": 0.5,  "y": 0.78, "zoom": 1.2 },
   "matcha-latte":        { "y": 0.58 },
   "parfait":             { "y": 0.58 },
   "pizza-toast":         { "x": 0.42, "y": 0.95, "zoom": 2.0 },

@@ -37,9 +37,10 @@ const PAGES = [
     //   top:        主役をページ幅いっぱいに大きく、ほかを下に横に並べる
     //   trio:       主役3品を大きく横に並べ、ほかを下に小さく並べる (hero に3品を指定)
     //   wide:       主役を幅の約2/3で大きく、ほかを右に縦に積む
+    //   pair:       主役 (幅の約6割) と1品を横に並べ、写真の高さと文字の位置をそろえる
     // badge を指定すると、主役の写真にバッジを付ける
     { label: 'Food', sub: 'フード', sections: [
-        { key: 'food', layout: 'wide', hero: '華麗なカレーとドライなカレー', badge: 'RECOMMEND', title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
+        { key: 'food', layout: 'pair', hero: '華麗なカレーとドライなカレー', badge: 'RECOMMEND', title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
           items: ['華麗なカレーとドライなカレー', 'クリームどんちゃん'] },
         { key: 'food', layout: 'side', hero: 'たまごっちサンド', badge: 'RECOMMEND', title: 'Sandwich & Hotdog', sub: 'サンド・ホットドッグ', mood: '片手で気軽に',
           items: ['ニューヨークホットドック', 'あんバターサンド', 'たまごっちサンド'] },
