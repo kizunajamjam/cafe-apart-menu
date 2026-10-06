@@ -47,10 +47,13 @@ const PAGES = [
     //   side:       主役を左に大きく、ほかを右に縦に並べる
     //   side-right: 主役を右に大きく、ほかを左に縦に並べる
     //   top:        主役をページ幅いっぱいに大きく、ほかを下に横に並べる
+    //   trio:       主役3品を大きく横に並べ、ほかを下に小さく並べる (hero に3品を指定)
+    // badge を指定すると、主役の写真にバッジを付ける
     { label: 'Sweets', sub: 'スイーツ', sections: [
         { key: 'sweets', layout: 'side', hero: 'クレープ', title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
           items: ['クレープ', 'シングルクレープ（バナナ）', 'シングルクレープ（レモン）', 'シングルクレープ(白玉抹茶)'] },
-        { key: 'sweets', layout: 'side-right', hero: 'チーズケーキ', title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
+        { key: 'sweets', layout: 'trio', hero: ['手作りキャロットケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'],
+          badge: 'HOMEMADE', title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
           items: ['手作りキャロットケーキ', 'チーズケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'] },
     ] },
     { label: 'Sweets', sub: 'スイーツ', sections: [
@@ -66,6 +69,14 @@ const PAGES = [
     ] },
 ];
 // 店舗情報は表紙の下に載せる
+
+// 長い商品名の改行位置 (| の位置でだけ改行する)
+const BREAK_HINTS = {
+    '手作り焦がしミルクチョコブラウニー': '手作り焦がし|ミルクチョコブラウニー',
+};
+const nameHtml = title => BREAK_HINTS[title]
+    ? `<span class="keep-words">${BREAK_HINTS[title].split('|').map(escapeHtml).join('<wbr>')}</span>`
+    : escapeHtml(title);
 
 // スプレッドシート（ホームページ）には載せるが、メニューには出さない品目
 const HIDDEN_TITLES = ['頑張るアルバイトさん'];
@@ -132,7 +143,7 @@ function itemText(it, conf, shared) {
     const note = conf.hideNote ? '' : it.note;
     return `
         <div class="item-line">
-            <span class="item-name">${escapeHtml(it.title)}</span>
+            <span class="item-name">${nameHtml(it.title)}</span>
             ${price ? `<span class="leader"></span><span class="item-price">${escapeHtml(price)}</span>` : ''}
         </div>
         ${desc ? `<div class="item-en">${escapeHtml(desc)}</div>` : ''}
@@ -148,14 +159,20 @@ function renderSection(conf, items) {
     const withPhoto = items.filter(usePhoto);
     const textOnly = items.filter(it => !usePhoto(it));
 
-    // layout 指定がある時は、主役 (hero) を先頭に
-    if (conf.layout && conf.hero) {
-        const i = withPhoto.findIndex(it => it.title === conf.hero);
-        if (i > 0) withPhoto.unshift(withPhoto.splice(i, 1)[0]);
+    // layout 指定がある時は、主役 (hero, 1品または複数) を先頭に
+    const heroes = conf.layout ? [].concat(conf.hero || []) : [];
+    if (heroes.length) {
+        const rank = it => { const i = heroes.indexOf(it.title); return i < 0 ? heroes.length : i; };
+        withPhoto.sort((a, b) => rank(a) - rank(b));
     }
-    const cards = withPhoto.map((it, i) => `
-        <article class="card${conf.layout && i === 0 ? ' is-hero' : ''}">
-            <div class="card-photo"><img src="photos/${photoKey(it.img)}.jpg" alt="${escapeHtml(it.title)}"></div>
+    const isHero = it => heroes.includes(it.title);
+    const heroCount = withPhoto.filter(isHero).length;
+    const cards = withPhoto.map(it => `
+        <article class="card${isHero(it) ? ' is-hero' : ''}">
+            <div class="card-photo">
+                <img src="photos/${photoKey(it.img)}.jpg" alt="${escapeHtml(it.title)}">
+                ${conf.badge && isHero(it) ? `<span class="photo-badge">${escapeHtml(conf.badge)}</span>` : ''}
+            </div>
             <div class="card-body">${itemText(it, conf, shared)}</div>
         </article>`).join('');
 
@@ -170,7 +187,7 @@ function renderSection(conf, items) {
                 ${conf.mood ? `<span class="section-mood">${escapeHtml(conf.mood)}</span>` : ''}
                 ${shared.price ? `<span class="section-price">${escapeHtml(formatPrice(shared.price))}</span>` : ''}
             </h3>` : ''}
-            ${cards ? `<div class="cards${conf.layout ? ` layout-${conf.layout}` : ''}" style="--cols: ${conf.cols || 3}; --rest: ${Math.max(1, withPhoto.length - 1)}">${cards}</div>` : ''}
+            ${cards ? `<div class="cards${conf.layout ? ` layout-${conf.layout}` : ''}" style="--cols: ${conf.cols || 3}; --rest: ${Math.max(1, withPhoto.length - heroCount)}">${cards}</div>` : ''}
             ${list ? `<ul class="list">${list}</ul>` : ''}
         </section>`;
 }

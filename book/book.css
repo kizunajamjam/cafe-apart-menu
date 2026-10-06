@@ -303,6 +303,49 @@ body {
 .layout-top .is-hero { grid-column: 1 / -1; }
 .layout-top .is-hero .card-photo { aspect-ratio: 16 / calc(9 * var(--ph)); }
 
+/* trio: 主役3品を大きく横に並べ、ほかを下に小さく (写真左・文字右) */
+.cards.layout-trio {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(4mm * var(--fs)) 5mm;
+}
+.layout-trio .is-hero .item-name { font-size: calc(10.5pt * var(--fs)); }
+.layout-trio .is-hero .item-price { font-size: calc(11pt * var(--fs)); }
+.layout-trio .is-hero .item-en,
+.layout-trio .is-hero .item-note { font-size: calc(7.5pt * var(--fs)); }
+.layout-trio .card:not(.is-hero) {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 4mm;
+    padding-top: calc(3mm * var(--fs));
+    border-top: 0.3mm dashed var(--rule);
+}
+.layout-trio .card:not(.is-hero) .card-photo {
+    width: calc((100% - 10mm) / 3 * 0.5);
+    flex-shrink: 0;
+    aspect-ratio: 4 / 3;
+}
+.layout-trio .card:not(.is-hero) .card-body { flex: 1; min-width: 0; padding-top: 0; max-width: 60%; }
+
+/* BREAK_HINTS で指定した位置でだけ改行する */
+.keep-words { word-break: keep-all; }
+
+/* 写真の上のバッジ (HOMEMADE など) */
+.card-photo { position: relative; }
+.photo-badge {
+    position: absolute;
+    top: 2.5mm;
+    left: 2.5mm;
+    padding: 0.6mm 2.4mm;
+    border-radius: 3mm;
+    background: var(--logo-orange);
+    color: #fff;
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: calc(6.5pt * min(var(--fs), 1.15));
+    letter-spacing: 0.14em;
+}
+
 /* 主役は文字も大きく */
 .is-hero .card-body { padding-top: 2.5mm; }
 .is-hero .item-name { font-size: calc(13pt * var(--fs)); }
