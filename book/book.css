@@ -150,7 +150,6 @@ body {
     color: var(--primary-color);
 }
 
-.section-limited .section-en { color: var(--logo-orange); }
 .section-kids .section-en { color: var(--logo-teal); }
 
 .section-note {
@@ -248,9 +247,9 @@ body {
 .card .item-name { overflow-wrap: break-word; min-width: 0; }
 .card .item-price { flex-shrink: 0; margin-left: auto; }
 
-/* 期間限定は横長カード (写真左・文字右) */
-.section-limited .cards { grid-template-columns: 1fr; }
-.section-limited .card {
+/* 横長カード (写真左・文字右) */
+.is-horizontal .cards { grid-template-columns: 1fr; }
+.is-horizontal .card {
     flex-direction: row;
     align-items: center;
     gap: 6mm;
@@ -258,12 +257,16 @@ body {
     border-radius: 2mm;
     overflow: hidden;
 }
-.section-limited .card-photo {
+.is-horizontal .card-photo {
     width: 38%;
     flex-shrink: 0;
     border-radius: 0;
 }
-.section-limited .card-body { flex: 1; padding: 0 6mm 0 0; }
+.is-horizontal .card-body { flex: 1; padding: 0 6mm 0 0; }
+.is-horizontal .item-name { font-size: calc(11pt * var(--fs)); }
+.is-horizontal .item-price { font-size: calc(11pt * var(--fs)); }
+.is-horizontal .item-en,
+.is-horizontal .item-note { font-size: calc(8pt * var(--fs)); }
 
 /* ---------- 大小を付けた配置 (スイーツ) ---------- */
 /* side: 主役を左に大きく、ほかを右に縦に並べる (side-right は左右反転) */
@@ -294,7 +297,13 @@ body {
 .layout-side-right .card:not(.is-hero) .card-photo {
     width: 40%;
     flex-shrink: 0;
-    aspect-ratio: 1 / calc(0.75 * var(--ph));
+    aspect-ratio: auto;
+    min-height: 22mm;
+}
+.layout-side .card:not(.is-hero) .card-photo img,
+.layout-side-right .card:not(.is-hero) .card-photo img {
+    position: absolute;
+    inset: 0;
 }
 .layout-side .card:not(.is-hero) .card-body,
 .layout-side-right .card:not(.is-hero) .card-body {
@@ -303,13 +312,13 @@ body {
     padding-top: 0;
 }
 
-/* 小さいカードは、最初を主役の上端、最後を下端にそろえる (間は均等) */
+.cards.layout-side[style*="--rest: 2"] { grid-template-columns: 1.1fr 1fr; }
+
+/* 小さいカードは主役の高さを均等に分け合い、写真を縦いっぱいに (隙間を作らない) */
 .layout-side .card:not(.is-hero),
-.layout-side-right .card:not(.is-hero) { align-self: center; }
-.layout-side .is-hero + .card,
-.layout-side-right .is-hero + .card { align-self: start; }
-.layout-side .card:not(.is-hero):last-child,
-.layout-side-right .card:not(.is-hero):last-child { align-self: end; }
+.layout-side-right .card:not(.is-hero) { align-self: stretch; align-items: stretch; }
+.layout-side .card:not(.is-hero) .card-body,
+.layout-side-right .card:not(.is-hero) .card-body { align-self: center; }
 
 /* top: 主役をページ幅いっぱいに、ほかを下に3列 */
 .cards.layout-top {

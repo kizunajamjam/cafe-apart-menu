@@ -9,7 +9,7 @@
 // フード・スイーツは種類と雰囲気でグループ分けする (items: スプレッドシートの商品名)。
 // どのグループにも入っていない商品は、rest: true のグループ (「その他」) に自動で入る。
 // cols は写真カードの列数。photos: false のセクションは写真を使わず文字だけで載せる。
-// inlineList: true は、写真のない商品を写真カードの空いた枠に並べる。
+// inlineList: true は、写真のない商品を写真カードの空いた枠に並べる。horizontal: true は横長カード (写真左・文字右)。
 const PAGES = [
     { type: 'cover' },
     { label: 'Drinks', sub: 'ドリンク', sections: [
@@ -46,8 +46,8 @@ const PAGES = [
     ] },
     { label: 'Food', sub: 'フード', sections: [
         { key: 'food', layout: 'wide', hero: 'ブルックリンブランチ', badge: 'RECOMMEND', title: 'Toast', sub: 'トースト', mood: 'ブランチにぴったりの一皿',
-          items: ['ブルーチーズバナナトースト', 'ピザトースト(バゲット)', 'ブルックリンブランチ'] },
-        { key: 'food', cols: 3, inlineList: true, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
+          items: ['ブルックリンブランチ', 'ピザトースト(バゲット)'] },
+        { key: 'food', cols: 2, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
           items: ['バタートースト', 'マクドみたいなポテト', 'ポテトチップス'] },
         { key: 'food', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
@@ -61,7 +61,9 @@ const PAGES = [
     { label: 'Sweets', sub: 'スイーツ', sections: [
         { key: 'sweets', cols: 2, title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
           items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
-        { key: 'sweets', cols: 3, title: 'Others', sub: 'その他', rest: true },
+        { key: 'food', horizontal: true, title: 'Sweet Toast', sub: '甘いトースト', mood: 'おやつにも',
+          items: ['ブルーチーズバナナトースト'] },
+        { key: 'sweets', cols: 2, title: 'Others', sub: 'その他', rest: true },
     ] },
     // 裏表紙
     { label: 'Kids', sub: 'キッズメニュー',
@@ -134,8 +136,17 @@ const photoKey = img => {
     const base = (img || '').replace(/\\/g, '/').split('/').pop().replace(/\.[^.]+$/, '');
     return base.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 };
-const photos = new Set(window.BOOK_PHOTOS || []);
-const hasPhoto = it => photos.has(photoKey(it.img));
+// 写真ごとの切り抜きの中心と拡大率 (photos/manifest.js)
+const PHOTOS = window.BOOK_PHOTOS || {};
+const hasPhoto = it => photoKey(it.img) in PHOTOS;
+// 元写真のまま保存してあるので、表示する枠に合わせてここで1回だけ切り抜く
+function photoImg(it) {
+    const key = photoKey(it.img);
+    const f = PHOTOS[key] || {};
+    const pos = `${Math.round((f.x ?? 0.5) * 100)}% ${Math.round((f.y ?? 0.5) * 100)}%`;
+    const zoom = f.zoom && f.zoom !== 1 ? ` transform: scale(${f.zoom}); transform-origin: ${pos};` : '';
+    return `<img src="photos/${key}.jpg" alt="${escapeHtml(it.title)}" style="object-position: ${pos};${zoom}">`;
+}
 
 // 2品以上で共通する最頻値 (価格・英語名)。共通価格は見出しに出し、共通の英語名は省略する
 function commonValue(items, field) {
@@ -178,7 +189,7 @@ function renderSection(conf, items) {
     const cards = withPhoto.map(it => `
         <article class="card${isHero(it) ? ' is-hero' : ''}">
             <div class="card-photo">
-                <img src="photos/${photoKey(it.img)}.jpg" alt="${escapeHtml(it.title)}">
+                ${photoImg(it)}
                 ${conf.badge && isHero(it) ? `<span class="photo-badge">${escapeHtml(conf.badge)}</span>` : ''}
             </div>
             <div class="card-body">${itemText(it, conf, shared)}</div>
@@ -187,7 +198,7 @@ function renderSection(conf, items) {
     const list = textOnly.map(it => `<li class="list-item">${itemText(it, conf, shared)}</li>`).join('');
 
     return `
-        <section class="section section-${conf.key}${conf.photos === false ? ' is-text' : ''}${conf.large ? ' is-large' : ''}">
+        <section class="section section-${conf.key}${conf.photos === false ? ' is-text' : ''}${conf.large ? ' is-large' : ''}${conf.horizontal ? ' is-horizontal' : ''}">
             ${conf.title ? `
             <h3 class="section-title">
                 <span class="section-en">${escapeHtml(conf.title)}</span>
@@ -265,7 +276,7 @@ function renderT2(page, data) {
 
     const arranges = arr.map(it => `
         <article class="arrange">
-            ${hasPhoto(it) ? `<div class="arrange-photo"><img src="photos/${photoKey(it.img)}.jpg" alt="${escapeHtml(it.title)}"></div>` : ''}
+            ${hasPhoto(it) ? `<div class="arrange-photo">${photoImg(it)}</div>` : ''}
             <div class="arrange-body">${itemText(it, {}, { price: '', desc: '' })}</div>
         </article>`).join('');
 
@@ -307,7 +318,7 @@ function render() {
 }
 
 // ページからはみ出す場合は、写真の高さ (--ph) → 文字 (--fs) の順に縮めて収める。
-// 余白がある時は写真を大きく、写真のないページは文字を大きくする
+// 写真のないページは、余白がある時に文字を大きくする
 function fitPages() {
     document.querySelectorAll('.page').forEach(page => {
         const body = page.querySelector('.page-body');
@@ -323,8 +334,7 @@ function fitPages() {
         let ph = 1, fs = 1;
         page.style.removeProperty('--ph');
         page.style.removeProperty('--fs');
-        // 余白があれば写真を縦に大きく (最大で正方形)、はみ出すなら小さく
-        while (!overflows() && ph < 1.33) { ph = +(ph + 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
+        // 写真の縦横比は 4:3 で固定。収まらない時だけ少し横長にして縮める
         while (overflows() && ph > 0.7) { ph = +(ph - 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         if (!page.querySelector('.card')) {
             const maxFs = page.classList.contains('page-t2') ? 1.25 : 1.6;

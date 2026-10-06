@@ -6,7 +6,7 @@
   "chunky-ice-cream":    { "y": 0.6 },
   "matcha-latte":        { "y": 0.58 },
   "parfait":             { "y": 0.58 },
-  "pizza-toast":         { "x": 0.45, "y": 0.68, "zoom": 1.2 },
+  "pizza-toast":         { "x": 0.42, "y": 0.95, "zoom": 2.0 },
   "shoratamarantarou":   { "x": 0.48, "y": 0.5,  "zoom": 1.6 },
   "teacider":            { "y": 0.58 }
 }
