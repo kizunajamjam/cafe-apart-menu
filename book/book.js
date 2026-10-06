@@ -209,6 +209,7 @@ function renderT2(page, data) {
     const shared = { price: commonValue(sel, 'price'), desc: commonValue(sel, 'desc') };
     const heading = (conf, price) => `
         <h3 class="section-title">
+            ${window.T2_SPARKLE ? `<span class="t2-spark">${window.T2_SPARKLE('#f39800')}</span>` : ''}
             <span class="section-en">${escapeHtml(conf.title)}</span>
             <span class="section-note">${escapeHtml(conf.sub)}</span>
             ${price ? `<span class="t2-price">${escapeHtml(formatPrice(price))}</span>` : ''}
