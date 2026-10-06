@@ -69,4 +69,28 @@ function render() {
     });
 }
 
+// 各ページで、列の中身がキッズ帯・フッターに食い込む場合は文字倍率 --fs を下げて収める
+function fitPages() {
+    document.querySelectorAll('.page').forEach(page => {
+        const overflows = () => {
+            const limit = (page.querySelector('.band:not(:empty)') || page.querySelector('.page-footer')).getBoundingClientRect().top;
+            const columnsOver = [...page.querySelectorAll('.column')].some(col => {
+                const last = col.lastElementChild;
+                return last && last.getBoundingClientRect().bottom > limit - 2;
+            });
+            return columnsOver || page.scrollHeight > page.clientHeight + 1;
+        };
+        let fs = 1;
+        page.style.removeProperty('--fs');
+        while (overflows() && fs > 0.75) {
+            fs = Math.round((fs - 0.02) * 100) / 100;
+            page.style.setProperty('--fs', fs);
+        }
+    });
+}
+
 render();
+fitPages();
+// Web フォント読み込み後・印刷直前に寸法が変わるため再計算する
+if (document.fonts) document.fonts.ready.then(fitPages);
+window.addEventListener('beforeprint', fitPages);

@@ -21,6 +21,7 @@
     --page-w: 210mm;
     --page-h: 297mm;
     --page-pad: 14mm;
+    --fs: 1; /* メニュー本文の文字倍率 */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -118,15 +119,15 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 10mm;
-    flex: 1;
-    min-height: 0;
+    /* 縮ませない: 収まらない時は menu.js が --fs を下げて文字を小さくする */
+    flex: 1 0 auto;
     padding: 0 3mm;
 }
 
 .column {
     display: flex;
     flex-direction: column;
-    gap: 6mm;
+    gap: calc(6mm * var(--fs));
 }
 
 /* ---------- セクション ---------- */
@@ -141,7 +142,7 @@ body {
 .section-en {
     font-family: var(--font-en);
     font-weight: 500;
-    font-size: 13pt;
+    font-size: calc(13pt * var(--fs));
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--primary-color);
@@ -150,12 +151,12 @@ body {
 .section-price {
     font-family: var(--font-en);
     font-weight: 500;
-    font-size: 9.5pt;
+    font-size: calc(9.5pt * var(--fs));
     color: var(--primary-color);
 }
 
 .section-sub {
-    font-size: 7pt;
+    font-size: calc(7pt * var(--fs));
     letter-spacing: 0.15em;
     color: var(--text-muted);
     margin-top: 1mm;
@@ -167,7 +168,7 @@ body {
 }
 
 .item {
-    padding: 1.1mm 0;
+    padding: calc(1.1mm * var(--fs)) 0;
     break-inside: avoid;
 }
 
@@ -179,7 +180,9 @@ body {
 
 .item-name {
     font-weight: 500;
-    font-size: 9.5pt;
+    word-break: auto-phrase;
+    text-wrap: pretty;
+    font-size: calc(9.5pt * var(--fs));
     color: var(--primary-color);
 }
 
@@ -193,7 +196,7 @@ body {
 .item-price {
     font-family: var(--font-en);
     font-weight: 500;
-    font-size: 9.5pt;
+    font-size: calc(9.5pt * var(--fs));
     color: var(--primary-color);
     white-space: nowrap;
 }
@@ -208,13 +211,15 @@ body {
 
 .item-en {
     font-family: var(--font-en);
-    font-size: 7pt;
+    font-size: calc(7pt * var(--fs));
     letter-spacing: 0.04em;
     color: var(--accent-color);
 }
 
 .item-note {
-    font-size: 7pt;
+    word-break: auto-phrase;
+    text-wrap: pretty;
+    font-size: calc(7pt * var(--fs));
     color: var(--text-muted);
 }
 
