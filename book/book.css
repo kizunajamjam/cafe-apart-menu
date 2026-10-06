@@ -740,3 +740,29 @@ body {
 @media screen and (max-width: 640px) { .page { zoom: 0.55; } }
 @media screen and (max-width: 480px) { .page { zoom: 0.45; } }
 @media screen and (max-width: 390px) { .page { zoom: 0.4; } }
+
+/* アイス・ホットのマーク */
+.temp {
+    display: inline-block;
+    flex-shrink: 0;
+    align-self: center;
+    margin-left: 1.2mm;
+    padding: 0.2mm 1.4mm;
+    border-radius: 1mm;
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: calc(6pt * min(var(--fs), 1.2));
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    color: #fff;
+}
+.temp + .temp { margin-left: 0.8mm; }
+.temp-ice { background: var(--logo-teal); }
+.temp-hot { background: var(--logo-orange); }
+.temp-legend {
+    font-size: 8pt;
+    color: var(--text-muted);
+    margin: 0 0 3mm;
+    text-align: right;
+}
+.temp-legend .temp { margin: 0 0.4mm 0 0; vertical-align: 0.3mm; }

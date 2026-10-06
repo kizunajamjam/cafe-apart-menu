@@ -57,6 +57,18 @@ function commonValue(items, field) {
     return top && top[1] > 1 ? top[0] : '';
 }
 
+// 英語名の「(iced/hot)」などから、アイス・ホットを選べるかを読み取る (スプレッドシートの英語名に書く)
+function temps(desc) {
+    const m = (desc || '').match(/\s*\(([^)]*\b(?:iced?|hot)\b[^)]*)\)\s*/i);
+    if (!m) return { list: [], desc: desc || '' };
+    const list = [];
+    if (/\bice/i.test(m[1])) list.push('ICE');
+    if (/\bhot\b/i.test(m[1])) list.push('HOT');
+    return { list, desc: desc.replace(m[0], ' ').trim() };
+}
+const tempBadges = list => list.map(t => `<span class="temp temp-${t.toLowerCase()}">${t}</span>`).join('');
+const TEMP_LEGEND = `<p class="temp-legend">${tempBadges(['ICE', 'HOT'])} アイス・ホットを選べます</p>`;
+
 function renderSection(key, items) {
     const conf = SECTIONS[key] || { title: key, subtitle: '' };
     const shared = conf.groupPrice ? commonValue(items, 'price') : '';
@@ -64,12 +76,13 @@ function renderSection(key, items) {
 
     const rows = items.map(it => {
         const price = sizedPrice(it, window.MENU_DATA || []) || (it.price && it.price !== shared ? formatPrice(it.price) : '');
-        const desc = it.desc !== sharedDesc ? it.desc : '';
+        const t = temps(it.desc !== sharedDesc ? it.desc : '');
+        const desc = t.desc;
         const note = conf.hideNote ? '' : it.note;
         return `
             <li class="item">
                 <div class="item-line">
-                    <span class="item-name">${escapeHtml(it.title)}</span>
+                    <span class="item-name">${escapeHtml(it.title)}</span>${tempBadges(t.list)}
                     ${price ? `<span class="leader"></span><span class="item-price">${escapeHtml(price)}</span>` : ''}
                 </div>
                 ${desc || note ? `<div class="item-sub">${desc ? `<span class="item-en">${escapeHtml(desc)}</span>` : ''}${note ? `<span class="item-note">${escapeHtml(note)}</span>` : ''}</div>` : ''}
@@ -84,6 +97,7 @@ function renderSection(key, items) {
                 ${shared ? `<span class="section-price">${escapeHtml(formatPrice(shared))}</span>` : ''}
             </h2>
             ${conf.subtitle ? `<p class="section-sub">${escapeHtml(conf.subtitle)}</p>` : ''}
+            ${items.some(it => temps(it.desc).list.length) ? TEMP_LEGEND : ''}
             <ul class="items">${rows}</ul>
         </div>`;
 }

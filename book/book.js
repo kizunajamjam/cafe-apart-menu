@@ -12,7 +12,7 @@
 // inlineList: true は、写真のない商品を写真カードの空いた枠に並べる。horizontal: true は横長カード (写真左・文字右)。
 const PAGES = [
     { type: 'cover' },
-    { label: 'Drinks', sub: 'ドリンク', sections: [
+    { label: 'Drinks', sub: 'ドリンク', tempLegend: true, sections: [
         { key: 'drink', photos: false, title: 'Coffee & Latte', sub: 'コーヒー・ラテ', mood: 'ほっと一息つきたい時に',
           items: ['気合の一杯', 'カフェアメリカーノ', 'エスプレッソ', 'エスプレッソトニック', 'カフェラテ', '抹茶ラテ'] },
         { key: 'drink', photos: false, title: 'Juice & Soda', sub: 'ジュース・ソーダ', mood: 'さっぱりリフレッシュ',
@@ -157,13 +157,26 @@ function commonValue(items, field) {
     return top && top[1] > 1 ? top[0] : '';
 }
 
+// 英語名の「(iced/hot)」などから、アイス・ホットを選べるかを読み取る (スプレッドシートの英語名に書く)
+function temps(desc) {
+    const m = (desc || '').match(/\s*\(([^)]*\b(?:iced?|hot)\b[^)]*)\)\s*/i);
+    if (!m) return { list: [], desc: desc || '' };
+    const list = [];
+    if (/\bice/i.test(m[1])) list.push('ICE');
+    if (/\bhot\b/i.test(m[1])) list.push('HOT');
+    return { list, desc: desc.replace(m[0], ' ').trim() };
+}
+const tempBadges = list => list.map(t => `<span class="temp temp-${t.toLowerCase()}">${t}</span>`).join('');
+const TEMP_LEGEND = `<p class="temp-legend">${tempBadges(['ICE', 'HOT'])} のマークが付いたドリンクは、アイス・ホットをお選びいただけます</p>`;
+
 function itemText(it, conf, shared) {
     const price = sizedPrice(it, window.MENU_DATA || []) || (it.price && it.price !== shared.price ? formatPrice(it.price) : '');
-    const desc = it.desc !== shared.desc ? it.desc : '';
+    const t = temps(it.desc !== shared.desc ? it.desc : '');
+    const desc = t.desc;
     const note = conf.hideNote ? '' : it.note;
     return `
         <div class="item-line">
-            <span class="item-name">${nameHtml(it.title)}</span>
+            <span class="item-name">${nameHtml(it.title)}</span>${tempBadges(t.list)}
             ${price ? `<span class="leader"></span><span class="item-price">${escapeHtml(price)}</span>` : ''}
         </div>
         ${desc ? `<div class="item-en">${escapeHtml(desc)}</div>` : ''}
@@ -309,6 +322,7 @@ function render() {
                     <span class="page-sub">${escapeHtml(page.sub || '')}</span>
                     <img src="../assets/logo.png" alt="" class="page-logo">
                 </header>
+                ${page.tempLegend ? TEMP_LEGEND : ''}
                 ${page.intro ? `<p class="page-intro">${page.intro.split('\n').map(escapeHtml).join('<br>')}</p>` : ''}
                 <div class="page-body">${body}</div>
             </section>`;
