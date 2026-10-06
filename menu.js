@@ -12,6 +12,9 @@ const SECTIONS = {
     kids:    { title: 'Kids',            subtitle: '米粉を使用したアレルギー配慮メニュー', groupPrice: true, hideNote: true },
 };
 
+// スプレッドシート（ホームページ）には載せるが、印刷メニューには出さない品目
+const HIDDEN_TITLES = ['頑張るアルバイトさん'];
+
 const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ホームページと同じく 4桁以上の数字にカンマを付ける (¥1000 → ¥1,000)
@@ -56,7 +59,7 @@ function renderSection(key, items) {
 }
 
 function render() {
-    const data = window.MENU_DATA || [];
+    const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title));
     document.querySelectorAll('[data-sections]').forEach(el => {
         el.innerHTML = el.dataset.sections.split(/\s+/)
             .map(key => [key, data.filter(it => it.category === key)])

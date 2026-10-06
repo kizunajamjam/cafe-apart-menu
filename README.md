@@ -30,4 +30,5 @@ node scripts/sync-menu.mjs foo.csv  # 手元の CSV から生成する場合
 
 - どのカテゴリをどのページ・列に置くか: `index.html` の `data-sections`
 - カテゴリ見出し・サブタイトル: `menu.js` の `SECTIONS`
+- 印刷メニューに出さない品目: `menu.js` の `HIDDEN_TITLES`（例: 頑張るアルバイトさん）
 - T2 / Kids は共通価格を見出しに出し、各品目の価格は共通価格と違う場合のみ表示
