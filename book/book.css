@@ -119,6 +119,9 @@ body {
     justify-content: space-evenly;
 }
 
+/* グループは縮ませない (収まらない時は book.js が写真・文字を小さくする) */
+.page-body > * { flex-shrink: 0; }
+
 .page-footer {
     text-align: center;
     font-family: var(--font-en);
@@ -284,7 +287,7 @@ body {
 }
 .layout-side .card:not(.is-hero) .card-photo,
 .layout-side-right .card:not(.is-hero) .card-photo {
-    width: 36%;
+    width: 40%;
     flex-shrink: 0;
     aspect-ratio: 1 / calc(0.75 * var(--ph));
 }
@@ -295,6 +298,14 @@ body {
     padding-top: 0;
 }
 
+/* 小さいカードは、最初を主役の上端、最後を下端にそろえる (間は均等) */
+.layout-side .card:not(.is-hero),
+.layout-side-right .card:not(.is-hero) { align-self: center; }
+.layout-side .is-hero + .card,
+.layout-side-right .is-hero + .card { align-self: start; }
+.layout-side .card:not(.is-hero):last-child,
+.layout-side-right .card:not(.is-hero):last-child { align-self: end; }
+
 /* top: 主役をページ幅いっぱいに、ほかを下に3列 */
 .cards.layout-top {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -302,6 +313,21 @@ body {
 }
 .layout-top .is-hero { grid-column: 1 / -1; }
 .layout-top .is-hero .card-photo { aspect-ratio: 16 / calc(9 * var(--ph)); }
+
+/* wide: 主役を幅の約2/3で大きく、ほか1品を横に (写真の高さをそろえる) */
+.cards.layout-wide {
+    grid-template-columns: 1.8fr 1fr;
+    gap: 0 6mm;
+}
+.layout-wide .card:not(.is-hero) .card-photo {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 30mm;
+}
+.layout-wide .card:not(.is-hero) .item-name { font-size: calc(10.5pt * var(--fs)); }
+.layout-wide .card:not(.is-hero) .item-price { font-size: calc(11pt * var(--fs)); }
+.layout-wide .card:not(.is-hero) .item-en,
+.layout-wide .card:not(.is-hero) .item-note { font-size: calc(7.5pt * var(--fs)); }
 
 /* trio: 主役3品を大きく横に並べ、ほかを下に小さく (写真左・文字右) */
 .cards.layout-trio {

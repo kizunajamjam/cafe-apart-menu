@@ -30,25 +30,26 @@ const PAGES = [
           items: ['ふんわりバニラのメルボルンブレックファースト', 'フローラルなフレンチアールグレイ', 'フルーティーなパックス・ア・ピーチ', 'スパイシーなオーガニックチャイ'] },
         { key: 't2', title: 'Arrange', sub: 'アレンジティー', rest: true },
     ] },
+    // フード・スイーツは大小を付けた配置 (layout)。hero の商品を大きく、ほかを小さく並べる
+    //   side:       主役を左に大きく、ほかを右に縦に並べる
+    //   side-right: 主役を右に大きく、ほかを左に縦に並べる
+    //   top:        主役をページ幅いっぱいに大きく、ほかを下に横に並べる
+    //   trio:       主役3品を大きく横に並べ、ほかを下に小さく並べる (hero に3品を指定)
+    //   wide:       主役を幅の約2/3で大きく、ほか1品を横に並べる
+    // badge を指定すると、主役の写真にバッジを付ける
     { label: 'Food', sub: 'フード', sections: [
-        { key: 'food', cols: 2, title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
+        { key: 'food', layout: 'wide', hero: '華麗なカレーとドライなカレー', badge: 'RECOMMEND', title: 'Curry & Udon', sub: 'カレー・うどん', mood: 'しっかり食べたい日に',
           items: ['華麗なカレーとドライなカレー', 'クリームどんちゃん'] },
-        { key: 'food', cols: 3, title: 'Toast', sub: 'トースト', mood: 'ブランチにぴったりの一皿',
+        { key: 'food', layout: 'side', hero: 'ブルックリンブランチ', badge: 'RECOMMEND', title: 'Toast', sub: 'トースト', mood: 'ブランチにぴったりの一皿',
           items: ['ブルーチーズバナナトースト', 'ピザトースト(バゲット)', 'ブルックリンブランチ'] },
     ] },
     { label: 'Food', sub: 'フード', sections: [
-        { key: 'food', cols: 3, title: 'Sandwich & Hotdog', sub: 'サンド・ホットドッグ', mood: '片手で気軽に',
+        { key: 'food', layout: 'side', hero: 'たまごっちサンド', badge: 'RECOMMEND', title: 'Sandwich & Hotdog', sub: 'サンド・ホットドッグ', mood: '片手で気軽に',
           items: ['ニューヨークホットドック', 'あんバターサンド', 'たまごっちサンド'] },
         { key: 'food', cols: 2, title: 'Light & Side', sub: '軽食・サイド', mood: '小腹がすいた時や、みんなでシェアに',
           items: ['バタートースト', 'マクドみたいなポテト', 'ポテトチップス'] },
         { key: 'food', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
-    // スイーツは大小を付けた配置 (layout)。hero の商品を大きく、ほかを小さく並べる
-    //   side:       主役を左に大きく、ほかを右に縦に並べる
-    //   side-right: 主役を右に大きく、ほかを左に縦に並べる
-    //   top:        主役をページ幅いっぱいに大きく、ほかを下に横に並べる
-    //   trio:       主役3品を大きく横に並べ、ほかを下に小さく並べる (hero に3品を指定)
-    // badge を指定すると、主役の写真にバッジを付ける
     { label: 'Sweets', sub: 'スイーツ', sections: [
         { key: 'sweets', layout: 'side', hero: 'クレープ', title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
           items: ['クレープ', 'シングルクレープ（バナナ）', 'シングルクレープ（レモン）', 'シングルクレープ(白玉抹茶)'] },
@@ -73,6 +74,12 @@ const PAGES = [
 // 長い商品名の改行位置 (| の位置でだけ改行する)
 const BREAK_HINTS = {
     '手作り焦がしミルクチョコブラウニー': '手作り焦がし|ミルクチョコブラウニー',
+    'ニューヨークホットドック': 'ニューヨーク|ホットドック',
+    'ブルーチーズバナナトースト': 'ブルーチーズ|バナナトースト',
+    'シングルクレープ（バナナ）': 'シングルクレープ|（バナナ）',
+    'シングルクレープ（レモン）': 'シングルクレープ|（レモン）',
+    'シングルクレープ(白玉抹茶)': 'シングルクレープ|(白玉抹茶)',
+    '華麗なカレーとドライなカレー': '華麗なカレーと|ドライなカレー',
 };
 const nameHtml = title => BREAK_HINTS[title]
     ? `<span class="keep-words">${BREAK_HINTS[title].split('|').map(escapeHtml).join('<wbr>')}</span>`
