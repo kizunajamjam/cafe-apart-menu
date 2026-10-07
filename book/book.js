@@ -69,6 +69,7 @@ const PAGES = [
     // 裏表紙: キッズメニュー (kids: true)。イラストとアレルギー情報は kids-art.js
     { label: 'Kids', sub: 'キッズメニュー', kids: true,
       kidsInfo: { title: '米粉のデザート', drink: 'キッズドリンク付き', free: '小麦・卵・乳 不使用',
+                  drinkNote: 'ドリンクはオレンジジュースかアップルジュース',
                   note: '※アレルギーは、アレルギー物質28品目のうち含まれるものを表示しています。　※イラストはイメージです。' },
       sections: [
         { key: 'kids', groupPrice: true },
@@ -342,8 +343,12 @@ function renderKids(page, data) {
                 <span class="kids-ribbon">${escapeHtml(info.drink)}</span>
                 <h3 class="kids-title">${escapeHtml(info.title)}</h3>
                 <span class="kids-free">${escapeHtml(info.free)}</span>
+                ${info.drinkNote ? `<p class="kids-drink-note">${escapeHtml(info.drinkNote)}</p>` : ''}
             </div>
-            <div class="kids-drink">${window.KIDS_DRINK_ART || ''}</div>
+            <div class="kids-drinks">
+                ${(window.KIDS_DRINKS || []).map((d, i) => `
+                    <div class="kids-drink kids-drink-${i}">${d.art}<span>${escapeHtml(d.name)}</span></div>`).join('<span class="kids-or">or</span>')}
+            </div>
             ${price ? `
             <div class="kids-price">
                 <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="${star}"/></svg>

@@ -89,12 +89,12 @@
             ${face(50, 68, 0.8)}
             ${sparkle(20, 26, 0.6, C.teal)}
         `),
-        // キッズドリンク (ストロー付きのカップ)
-        drink: `
+        // キッズドリンク (ストロー付きのカップ)。juice の色で中身を変える
+        drink: juice => `
             <svg viewBox="0 0 60 80" aria-hidden="true">
                 <path d="M34 4 L 30 22" stroke="${C.teal}" stroke-width="3.5" stroke-linecap="round"/>
                 <path d="M12 22 h36 l-4 50 q-14 5 -28 0 z" fill="${C.cream}" stroke="${C.navy}" stroke-width="2"/>
-                <path d="M14 36 h32 l-3 34 q-13 4 -26 0 z" fill="${C.orange}"/>
+                <path d="M14 36 h32 l-3 34 q-13 4 -26 0 z" fill="${juice}"/>
                 ${face(30, 50, 0.7).replace(/#2c3e50/g, C.cream)}
             </svg>`,
     };
@@ -108,5 +108,9 @@
         // スプレッドシートは「みかんorヨーグルト」、店頭のキッズメニューは「みかんorいちご」
         'クレープ(みかんorヨーグルト)': { name: 'クレープ（みかんorいちご）', art: art.crepe, allergens: ['大豆'] },
     };
-    window.KIDS_DRINK_ART = art.drink;
+    // キッズドリンクは2種類から選べる
+    window.KIDS_DRINKS = [
+        { name: 'オレンジ', art: art.drink(C.orange) },
+        { name: 'アップル', art: art.drink('#e8c64a') },
+    ];
 })();

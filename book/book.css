@@ -694,6 +694,7 @@ body {
 }
 
 .kids-title {
+    white-space: nowrap;
     margin-top: calc(3mm * var(--fs));
     font-weight: 700;
     font-size: calc(24pt * var(--fs));
@@ -715,12 +716,40 @@ body {
     letter-spacing: 0.06em;
 }
 
-.kids-drink {
-    width: calc(16mm * var(--fs));
-    flex-shrink: 0;
-    transform: rotate(8deg);
+.kids-drink-note {
+    white-space: nowrap;
+    margin-top: calc(2.5mm * var(--fs));
+    font-size: calc(8.5pt * var(--fs));
+    color: var(--primary-color);
 }
+
+.kids-drinks {
+    display: flex;
+    align-items: center;
+    gap: 1.5mm;
+    flex-shrink: 0;
+}
+.kids-drink {
+    width: calc(14mm * var(--fs));
+    text-align: center;
+}
+.kids-drink-0 { transform: rotate(-6deg); }
+.kids-drink-1 { transform: rotate(7deg); }
 .kids-drink svg { width: 100%; display: block; }
+.kids-drink span {
+    display: block;
+    margin-top: 1mm;
+    font-weight: 700;
+    font-size: calc(7pt * var(--fs));
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+.kids-or {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: calc(10pt * var(--fs));
+    color: var(--logo-teal);
+}
 
 .kids-price {
     position: relative;
