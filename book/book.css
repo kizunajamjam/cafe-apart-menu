@@ -658,6 +658,172 @@ body {
 .arrange .item-name { font-size: calc(10.5pt * min(var(--fs), 1.1)); }
 .arrange .item-price { font-size: calc(11pt * min(var(--fs), 1.1)); }
 
+/* ---------- キッズメニュー (裏表紙) ---------- */
+.kid-letter { display: inline-block; }
+.kid-letter-0 { color: var(--logo-orange); transform: rotate(-6deg); }
+.kid-letter-1 { color: var(--logo-teal); transform: translateY(-1mm) rotate(4deg); }
+.kid-letter-2 { color: #e8b53a; transform: rotate(-3deg); }
+.kid-letter-3 { color: var(--primary-color); transform: translateY(-0.6mm) rotate(6deg); }
+
+.kids-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6mm;
+    padding: calc(7mm * var(--fs)) 8mm;
+    background: var(--bg-sand);
+    border-radius: 4mm;
+    flex-shrink: 0;
+    /* 水玉 */
+    background-image: radial-gradient(rgba(243, 152, 0, 0.18) 1.1mm, transparent 1.2mm);
+    background-size: 9mm 9mm;
+}
+
+.kids-hero-text { flex: 1; }
+
+.kids-ribbon {
+    display: inline-block;
+    padding: 1mm 4mm;
+    background: var(--logo-teal);
+    color: #fff;
+    font-weight: 700;
+    font-size: calc(9pt * var(--fs));
+    letter-spacing: 0.08em;
+    border-radius: 1mm;
+    transform: rotate(-3deg);
+}
+
+.kids-title {
+    margin-top: calc(3mm * var(--fs));
+    font-weight: 700;
+    font-size: calc(24pt * var(--fs));
+    letter-spacing: 0.08em;
+    color: var(--primary-color);
+    line-height: 1.25;
+}
+
+.kids-free {
+    display: inline-block;
+    margin-top: calc(2.5mm * var(--fs));
+    padding: 0.8mm 3.5mm;
+    border: 0.5mm solid var(--logo-orange);
+    border-radius: 5mm;
+    background: #fff;
+    color: var(--logo-orange);
+    font-weight: 700;
+    font-size: calc(9.5pt * var(--fs));
+    letter-spacing: 0.06em;
+}
+
+.kids-drink {
+    width: calc(16mm * var(--fs));
+    flex-shrink: 0;
+    transform: rotate(8deg);
+}
+.kids-drink svg { width: 100%; display: block; }
+
+.kids-price {
+    position: relative;
+    width: calc(34mm * var(--fs));
+    height: calc(34mm * var(--fs));
+    flex-shrink: 0;
+    transform: rotate(-10deg);
+}
+.kids-price svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.kids-price polygon { fill: var(--logo-orange); }
+.kids-price span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: calc(15pt * var(--fs));
+    line-height: 1.1;
+}
+.kids-price small {
+    font-size: calc(9pt * var(--fs));
+    letter-spacing: 0.2em;
+}
+
+.kids-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(6mm * var(--fs)) 7mm;
+    padding: 1mm 1.5mm; /* 傾けたカードの角が切れないように */
+}
+
+.kid-card {
+    display: flex;
+    align-items: center;
+    gap: 4mm;
+    padding: calc(4mm * var(--fs)) 4.5mm;
+    border-radius: 4mm;
+}
+.kid-tone-0 { background: #fdf0dc; transform: rotate(-0.8deg); }
+.kid-tone-1 { background: #def1ed; transform: rotate(0.8deg); }
+.kid-tone-2 { background: #fbe6da; transform: rotate(0.6deg); }
+.kid-tone-3 { background: #f7edcc; transform: rotate(-0.6deg); }
+
+.kid-art {
+    width: calc(27mm * var(--fs));
+    height: calc(27mm * var(--fs));
+    flex-shrink: 0;
+}
+.kid-art svg { width: 100%; height: 100%; display: block; }
+
+.kid-body { min-width: 0; }
+
+.kid-name {
+    display: inline;
+    font-weight: 700;
+    font-size: calc(11pt * var(--fs));
+    line-height: 1.7;
+    color: var(--primary-color);
+    word-break: auto-phrase;
+    /* 波線の下線 */
+    padding-bottom: 1.4mm;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='4' viewBox='0 0 12 4'%3E%3Cpath d='M0 2 Q 3 0 6 2 T 12 2' fill='none' stroke='%23f39800' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: 0 100%;
+    background-size: 3mm 1mm;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.kid-price {
+    font-family: var(--font-en);
+    font-weight: 500;
+    color: var(--logo-orange);
+}
+
+.kid-allergen {
+    margin-top: calc(2mm * var(--fs));
+    font-size: calc(7.5pt * var(--fs));
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+.kid-allergen span {
+    display: inline-block;
+    margin-right: 1.5mm;
+    padding: 0 1.5mm;
+    border-radius: 1mm;
+    background: #fff;
+    color: var(--logo-teal);
+    font-weight: 700;
+    font-size: calc(6.5pt * var(--fs));
+}
+
+.kids-note {
+    text-align: center;
+    font-size: calc(7pt * var(--fs));
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
 /* ---------- 表紙 ---------- */
 .page-cover {
     justify-content: center;

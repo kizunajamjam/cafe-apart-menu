@@ -66,11 +66,12 @@ const PAGES = [
           items: ['ブルーチーズバナナトースト'] },
         { key: 'sweets', cols: 2, title: 'Others', sub: 'その他', rest: true },
     ] },
-    // 裏表紙
-    { label: 'Kids', sub: 'キッズメニュー',
-      intro: '米粉を使用した、アレルギーに配慮したデザートです。',
+    // 裏表紙: キッズメニュー (kids: true)。イラストとアレルギー情報は kids-art.js
+    { label: 'Kids', sub: 'キッズメニュー', kids: true,
+      kidsInfo: { title: '米粉のデザート', drink: 'キッズドリンク付き', free: '小麦・卵・乳 不使用',
+                  note: '※アレルギーは、アレルギー物質28品目のうち含まれるものを表示しています。　※イラストはイメージです。' },
       sections: [
-        { key: 'kids', photos: false, large: true, groupPrice: true, hideNote: true, title: 'Kids Dessert', sub: 'キッズデザート' },
+        { key: 'kids', groupPrice: true },
     ] },
 ];
 // 店舗情報は表紙の下に載せる
@@ -84,6 +85,11 @@ const BREAK_HINTS = {
     'シングルクレープ（レモン）': 'シングルクレープ|（レモン）',
     'シングルクレープ(白玉抹茶)': 'シングルクレープ|(白玉抹茶)',
     '華麗なカレーとドライなカレー': '華麗なカレーと|ドライなカレー',
+    'バナナスティックケーキ': 'バナナスティック|ケーキ',
+    '国産豆乳プリンタルト': '国産豆乳|プリンタルト',
+    '国産りんごのタルト': '国産りんごの|タルト',
+    'さつまいもと栗のタルト': 'さつまいもと栗の|タルト',
+    'クレープ（みかんorいちご）': 'クレープ|（みかんorいちご）',
 };
 const nameHtml = title => BREAK_HINTS[title]
     ? `<span class="keep-words">${BREAK_HINTS[title].split('|').map(escapeHtml).join('<wbr>')}</span>`
@@ -305,19 +311,65 @@ function renderT2(page, data) {
         ${arr.length ? `<section class="section t2-arrange">${heading(arrConf)}<div class="arrange-grid">${arranges}</div></section>` : ''}`;
 }
 
+// キッズメニュー (裏表紙) の本文
+function renderKids(page, data) {
+    const items = sectionItems(page.sections[0], data);
+    const price = formatPrice(commonValue(items, 'price') || (items[0] && items[0].price) || '');
+    const info = page.kidsInfo;
+    const menu = window.KIDS_MENU || {};
+
+    const cards = items.map((it, i) => {
+        const m = menu[it.title] || {};
+        const ownPrice = it.price && formatPrice(it.price) !== price ? formatPrice(it.price) : '';
+        return `
+            <article class="kid-card kid-tone-${i % 4}">
+                <div class="kid-art">${m.art || window.T2_ART_DEFAULT?.svg || ''}</div>
+                <div class="kid-body">
+                    <h4 class="kid-name">${nameHtml(m.name || it.title)}${ownPrice ? ` <span class="kid-price">${escapeHtml(ownPrice)}</span>` : ''}</h4>
+                    ${m.allergens ? `<p class="kid-allergen"><span>アレルギー</span>${m.allergens.map(escapeHtml).join('、')}</p>` : ''}
+                </div>
+            </article>`;
+    }).join('');
+
+    const star = Array.from({ length: 32 }, (_, i) => {
+        const r = i % 2 ? 40 : 48, a = Math.PI * i / 16;
+        return `${(50 + r * Math.sin(a)).toFixed(1)},${(50 - r * Math.cos(a)).toFixed(1)}`;
+    }).join(' ');
+
+    return `
+        <div class="kids-hero">
+            <div class="kids-hero-text">
+                <span class="kids-ribbon">${escapeHtml(info.drink)}</span>
+                <h3 class="kids-title">${escapeHtml(info.title)}</h3>
+                <span class="kids-free">${escapeHtml(info.free)}</span>
+            </div>
+            <div class="kids-drink">${window.KIDS_DRINK_ART || ''}</div>
+            ${price ? `
+            <div class="kids-price">
+                <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="${star}"/></svg>
+                <span><small>ALL</small>${escapeHtml(price)}</span>
+            </div>` : ''}
+        </div>
+        <div class="kids-grid">${cards}</div>
+        <p class="kids-note">${escapeHtml(info.note)}</p>`;
+}
+
+// 見出しの文字を1文字ずつ色違いに (キッズページ)
+const playfulTitle = text => [...text].map((ch, i) => `<span class="kid-letter kid-letter-${i % 4}">${escapeHtml(ch)}</span>`).join('');
+
 function render() {
     const data = (window.MENU_DATA || []).filter(it => !HIDDEN_TITLES.includes(it.title) && !VARIANT_TITLES.includes(it.title));
     document.getElementById('book').innerHTML = PAGES.map(page => {
         if (page.type === 'cover') return renderCover();
-        const body = page.t2 ? renderT2(page, data) : page.sections
+        const body = page.t2 ? renderT2(page, data) : page.kids ? renderKids(page, data) : page.sections
             .map(conf => [conf, sectionItems(conf, data)])
             .filter(([, items]) => items.length)
             .map(([conf, items]) => renderSection(conf, items))
             .join('');
         return `
-            <section class="page${page.t2 ? ' page-t2' : ''}" data-group="${escapeHtml(page.label + ':' + page.sections.map(c => c.layout || c.cols || 0).join(','))}">
+            <section class="page${page.t2 ? ' page-t2' : ''}${page.kids ? ' page-kids' : ''}" data-group="${escapeHtml(page.label + ':' + page.sections.map(c => c.layout || c.cols || 0).join(','))}">
                 <header class="page-header">
-                    <h2 class="page-title">${escapeHtml(page.label)}</h2>
+                    <h2 class="page-title">${page.kids ? playfulTitle(page.label) : escapeHtml(page.label)}</h2>
                     <span class="page-sub">${escapeHtml(page.sub || '')}</span>
                     <img src="../assets/logo.png" alt="" class="page-logo">
                 </header>
@@ -347,7 +399,7 @@ function fitPages() {
         // 写真の縦横比は 4:3 で固定。収まらない時だけ少し横長にして縮める
         while (overflows() && ph > 0.7) { ph = +(ph - 0.03).toFixed(2); page.style.setProperty('--ph', ph); }
         if (!page.querySelector('.card')) {
-            const maxFs = page.classList.contains('page-t2') ? 1.25 : 1.6;
+            const maxFs = page.classList.contains('page-t2') ? 1.25 : page.classList.contains('page-kids') ? 1.2 : 1.6;
             while (!overflows() && fs < maxFs) { fs = +(fs + 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
         }
         while (overflows() && fs > 0.8) { fs = +(fs - 0.02).toFixed(2); page.style.setProperty('--fs', fs); }
