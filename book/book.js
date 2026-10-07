@@ -90,7 +90,6 @@ const BREAK_HINTS = {
     '国産豆乳プリンタルト': '国産豆乳|プリンタルト',
     '国産りんごのタルト': '国産りんごの|タルト',
     'さつまいもと栗のタルト': 'さつまいもと栗の|タルト',
-    'クレープ（みかんorいちご）': 'クレープ|（みかんorいちご）',
 };
 const nameHtml = title => BREAK_HINTS[title]
     ? `<span class="keep-words">${BREAK_HINTS[title].split('|').map(escapeHtml).join('<wbr>')}</span>`

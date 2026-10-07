@@ -79,13 +79,12 @@
             ${face(48, 69, 0.85)}
             ${sparkle(80, 26, 0.6, C.cream)}
         `),
-        // クレープ (みかん・いちご)
+        // クレープ (みかん)
         crepe: svg(C.peach, `
             <path d="M18 74 L 50 26 L 82 74 Z" fill="#f5d590"/>
             <path d="M18 74 L 50 26 L 82 74" stroke="#e2b25e" stroke-width="2" fill="none"/>
             <path d="M30 56 Q 50 48 70 56 L 76 66 Q 50 58 24 66 Z" fill="#fff8ec"/>
-            <circle cx="40" cy="54" r="5.5" fill="${C.orange}"/><path d="M40 49 v10 M35 54 h10" stroke="#ffd08a" stroke-width="1"/>
-            <circle cx="60" cy="53" r="5" fill="#e0453a"/><path d="M58 48 q2 -3 4 0" stroke="${C.teal}" stroke-width="2" fill="none"/>
+            ${[38, 50, 62].map(x => `<circle cx="${x}" cy="54" r="5.5" fill="${C.orange}"/><path d="M${x} 49 v10 M${x - 5} 54 h10" stroke="#ffd08a" stroke-width="1"/>`).join('')}
             ${face(50, 68, 0.8)}
             ${sparkle(20, 26, 0.6, C.teal)}
         `),
@@ -105,8 +104,8 @@
         'ガトーショコラ': { art: art.chocolat, allergens: ['大豆'] },
         '国産りんごのタルト': { art: art.apple, allergens: ['大豆', 'りんご'] },
         'さつまいもと栗のタルト': { art: art.sweetpotato, allergens: ['大豆'] },
-        // スプレッドシートは「みかんorヨーグルト」、店頭のキッズメニューは「みかんorいちご」
-        'クレープ(みかんorヨーグルト)': { name: 'クレープ（みかんorいちご）', art: art.crepe, allergens: ['大豆'] },
+        // スプレッドシートは「みかんorヨーグルト」だが、今はみかんのみ
+        'クレープ(みかんorヨーグルト)': { name: 'クレープ（みかん）', art: art.crepe, allergens: ['大豆'] },
     };
     // キッズドリンクは2種類から選べる
     window.KIDS_DRINKS = [
