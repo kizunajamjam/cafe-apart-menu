@@ -52,14 +52,14 @@ const PAGES = [
           items: ['バタートースト', 'マクドみたいなポテト', 'ポテトチップス'] },
         { key: 'food', cols: 3, title: 'Others', sub: 'その他', rest: true },
     ] },
-    { label: 'Sweets', sub: 'スイーツ', sections: [
+    { label: 'Treats', sub: 'スイーツ', sections: [
         { key: 'sweets', layout: 'side', hero: 'クレープ', title: 'Crepe', sub: 'クレープ', mood: '甘いひとときに',
           items: ['クレープ', 'シングルクレープ（バナナ）', 'シングルクレープ（レモン）', 'シングルクレープ(白玉抹茶)'] },
         { key: 'sweets', layout: 'trio', hero: ['手作りキャロットケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'],
           badge: 'HOMEMADE', title: 'Cake & Baked', sub: 'ケーキ・焼き菓子', mood: 'コーヒーや紅茶のお供に',
           items: ['手作りキャロットケーキ', 'チーズケーキ', '手作りフロランタン', '手作り焦がしミルクチョコブラウニー'] },
     ] },
-    { label: 'Sweets', sub: 'スイーツ', sections: [
+    { label: 'Treats', sub: 'スイーツ', sections: [
         { key: 'sweets', cols: 2, title: 'Ice & Parfait', sub: 'アイス・パフェ', mood: 'ひんやり冷たいデザート',
           items: ['アイスクリーム', 'チャンキーアイスクリーム', 'アフォガート', 'ティラミス風パフェ'] },
         { key: 'food', horizontal: true, title: 'Sweet Toast', sub: '甘いトースト', mood: 'おやつにも',

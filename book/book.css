@@ -921,7 +921,7 @@ body {
 /* Instagram の QR コード (book/assets/instagram-qr.png) */
 .cover-qr {
     flex-shrink: 0;
-    width: 24mm;
+    width: 32mm;
     text-align: center;
 }
 .cover-qr img { width: 100%; display: block; border-radius: 2mm; }

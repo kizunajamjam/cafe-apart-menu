@@ -7,7 +7,7 @@ const SECTIONS = {
     drink:   { title: 'Coffee & Drinks', subtitle: 'コーヒー・ドリンク' },
     t2:      { title: 'T2 Tea',          subtitle: 'オーストラリア発の紅茶ブランド', groupPrice: true },
     food:    { title: 'Food',            subtitle: 'フード' },
-    sweets:  { title: 'Sweets',          subtitle: 'スイーツ' },
+    sweets:  { title: 'Treats',          subtitle: 'スイーツ' },
     kids:    { title: 'Kids',            subtitle: '米粉を使用したアレルギー配慮メニュー', groupPrice: true, hideNote: true },
 };
 
