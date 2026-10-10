@@ -924,7 +924,8 @@ body {
     width: 32mm;
     text-align: center;
 }
-.cover-qr img { width: 100%; display: block; border-radius: 2mm; }
+/* 画像の白い部分を紙の色に重ねて (乗算)、白抜きの境目をなくす。画像そのものは加工しない */
+.cover-qr img { width: 100%; display: block; mix-blend-mode: multiply; }
 .cover-qr p {
     margin-top: 1mm;
     font-family: var(--font-en);
