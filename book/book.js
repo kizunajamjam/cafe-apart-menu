@@ -239,9 +239,15 @@ function renderCover() {
                 <p class="cover-sub">居心地のよい、いつもの場所。</p>
             </div>
             <div class="cover-foot">
-                <p>${escapeHtml(SHOP.address)}</p>
-                <p>${escapeHtml(SHOP.hours)}　${escapeHtml(SHOP.closed)}</p>
-                <p>ペット同伴可　／　T2 オーストラリア発紅茶 取扱い店　／　Instagram ${escapeHtml(SHOP.instagram)}</p>
+                <div class="cover-info">
+                    <p>${escapeHtml(SHOP.address)}</p>
+                    <p>${escapeHtml(SHOP.hours)}　${escapeHtml(SHOP.closed)}</p>
+                    <p>ペット同伴可　／　T2 オーストラリア発紅茶 取扱い店</p>
+                </div>
+                <div class="cover-qr">
+                    <img src="assets/instagram-qr.png" alt="Instagram ${escapeHtml(SHOP.instagram)} のQRコード">
+                    <p>Follow us on Instagram</p>
+                </div>
             </div>
         </section>`;
 }

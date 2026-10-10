@@ -902,15 +902,35 @@ body {
 /* 店舗情報 (裏表紙の代わりに表紙の下へ) */
 .cover-foot {
     position: absolute;
-    bottom: 17mm;
+    bottom: 15mm;
     left: 16mm;
     right: 16mm;
     padding-top: 4mm;
     border-top: 0.3mm solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8mm;
+    text-align: left;
     font-size: 8pt;
     line-height: 1.9;
     letter-spacing: 0.05em;
     color: var(--text-muted);
+}
+
+/* Instagram の QR コード (book/assets/instagram-qr.png) */
+.cover-qr {
+    flex-shrink: 0;
+    width: 24mm;
+    text-align: center;
+}
+.cover-qr img { width: 100%; display: block; border-radius: 2mm; }
+.cover-qr p {
+    margin-top: 1mm;
+    font-family: var(--font-en);
+    font-size: 6pt;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
 }
 
 /* ---------- 印刷 ---------- */

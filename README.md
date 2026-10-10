@@ -49,6 +49,7 @@ book/photos/<名前>.jpg     加工済み（自動生成）
 - レジ用: どのカテゴリをどのページ・列に置くか → `register/index.html` の `data-sections`、見出し → `register/menu.js` の `SECTIONS`
 - ブック: ページ構成・グループ分け・列数 → `book/book.js` の `PAGES`（新商品はグループに入れるまで「その他」に出る）
 - ブックの大小を付けた配置: グループに `layout`（`side` / `side-right` / `top` / `trio` / `wide` / `pair`）と主役の商品名 `hero`（trio は3品）を指定すると、主役を大きく、ほかを小さく並べる。`badge` で主役の写真にバッジ（例: HOMEMADE、RECOMMEND）。長い商品名の改行位置は `BREAK_HINTS`
+- 表紙: 下の店舗情報は `book/book.js` の `SHOP` と `renderCover`、右下の Instagram の QR コードは `book/assets/instagram-qr.png`（https://www.instagram.com/cafe.apart に飛ぶ。差し替える時は同じ名前で上書き）
 - T2 ページ: 上部の写真は `book/assets/t2-hero.jpg`、紹介文は `book/book.js` の T2 ページの `hero`、ティーごとのイラストと香りのキーワードは `book/t2-art.js`（新しいティーは同じ商品名で追加。無ければティーカップの絵になる）
 - キッズ（裏表紙）: 見出し・「キッズドリンク付き」「小麦・卵・乳 不使用」・ドリンクの説明と注記は `book/book.js` の Kids ページの `kidsInfo`、商品ごとのイラスト・アレルギー物質・表示名とキッズドリンクの種類（KIDS_DRINKS）は `book/kids-art.js`（価格はスプレッドシートから。全品同じなら「ALL ¥350」のシールに）
 - どちらも、ページに収まらない場合は自動で文字（ブックは先に写真の高さ）を縮めて収めます
